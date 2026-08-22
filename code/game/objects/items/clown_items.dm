@@ -51,10 +51,10 @@
 				msg = "It's seen some light use, but it's still pretty fresh."
 	. += span_notice("[msg]")
 
-/obj/item/soap/nanotrasen
-	desc = "A heavy duty bar of Nanotrasen brand soap. Smells of plasma."
+/obj/item/soap/warra
+	desc = "A heavy duty bar of Makosso-Warra brand soap. Smells of plasma."
 	grind_results = list(/datum/reagent/toxin/plasma = 10, /datum/reagent/lye = 10)
-	icon_state = "soapnt"
+	icon_state = "soapwarra"
 	cleanspeed = 28 //janitor gets this
 	uses = 300
 
@@ -64,14 +64,14 @@
 	cleanspeed = 30 // faster to reward chemists for going to the effort
 
 /obj/item/soap/deluxe
-	desc = "A deluxe Waffle Co. brand bar of soap. Smells of high-class luxury."
+	desc = "A deluxe bar of soap. Smells of high-class luxury."
 	icon_state = "soapdeluxe"
 	cleanspeed = 20 //captain gets one of these
 
 /obj/item/soap/syndie
 	desc = "An untrustworthy bar of soap made of strong chemical agents that dissolve blood faster."
 	icon_state = "soapsyndie"
-	cleanspeed = 27 // ever so slightly better than NT
+	cleanspeed = 27 // ever so slightly better than warra
 	uses = 300
 
 /obj/item/soap/omega

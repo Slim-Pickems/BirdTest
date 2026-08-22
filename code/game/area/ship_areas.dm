@@ -85,7 +85,7 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 /area/ship
 	dynamic_lighting = DYNAMIC_LIGHTING_FORCED
 	always_unpowered = FALSE
-	area_flags = VALID_TERRITORY | SHIP_SMOOTHING // Loading the same shuttle map at a different time will produce distinct area instances.
+	area_flags = VALID_TERRITORY | SHIP_SMOOTHING | NO_RANDOM_LIGHT_BREAKAGE // Loading the same shuttle map at a different time will produce distinct area instances.
 	icon_state = "shuttle"
 	flags_1 = CAN_BE_DIRTY_1
 	lighting_colour_tube = "#fff0dd"
@@ -157,6 +157,14 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	lighting_colour_bulb = "#ffdbb4"
 	lighting_brightness_tube = 6
 
+/area/ship/bridge/cool
+	name = "Bridge"
+	icon_state = "bridge"
+	ambientsounds = list('sound/ambience/signal.ogg')
+	lighting_colour_tube = "#7794c9"
+	lighting_colour_bulb = "#7794c9"
+	lighting_brightness_tube = 6
+
 /// Crew Quarters ///
 /area/ship/crew
 	name = "Crew Quarters"
@@ -217,6 +225,9 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 /area/ship/crew/dorm/captain
 	name = "Captain's Quarters"
 
+/area/ship/crew/dorm/commad
+	name = "Command Quarters"
+
 /area/ship/crew/toilet
 	name = "Restroom"
 	icon_state = "toilet"
@@ -271,6 +282,14 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 /area/ship/crew/office
 	name = "Office"
 	icon_state = "vacant_office"
+	sound_environment = SOUND_AREA_WOODFLOOR
+
+/area/ship/crew/office/cic
+	name = "Control Center"
+	icon_state = "vacant_office"
+	ambientsounds = list('sound/ambience/signal.ogg')
+	lighting_colour_tube = "#7794c9"
+	lighting_colour_bulb = "#7794c9"
 	sound_environment = SOUND_AREA_WOODFLOOR
 
 /area/ship/crew/office/lobby
@@ -382,6 +401,21 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	name = "Incinerator"
 	icon_state = "disposal"
 
+/area/ship/engineering/storage
+	name = "Engineering Storage Room"
+
+/area/ship/engineering/hallway
+	name = "Engineering Hallway"
+
+/area/ship/engineering/hallway/port
+	name = "Engineering Port Hallway"
+
+/area/ship/engineering/hallway/starboard
+	name = "Engineering Starboard Hallway"
+
+/area/ship/engineering/hallway/aft
+	name = "Engineering Aft Hallway"
+
 /// Security ///
 /area/ship/security
 	name = "Brig"
@@ -457,6 +491,14 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 
 /area/ship/hallway/fore
 	name = "Fore Hallway"
+	icon_state = "hallF"
+
+/area/ship/hallway/fore/port
+	name = "Port Fore Hallway"
+	icon_state = "hallF"
+
+/area/ship/hallway/fore/starboard
+	name = "Starboard Fore Hallway"
 	icon_state = "hallF"
 
 /area/ship/hallway/starboard
@@ -535,3 +577,8 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	ambience_index = AMBIENCE_SPACE
 	sound_environment = SOUND_AREA_SPACE
 	lightswitch = TRUE
+
+/area/ship/external/dark
+	name = "Dark External"
+	dynamic_lighting = DYNAMIC_LIGHTING_FORCED
+	icon_state = "space_near"

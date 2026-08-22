@@ -316,7 +316,7 @@ GLOBAL_VAR_INIT(total_borer_hosts_needed, 3)
 			to_chat(M, "[link] [rendered]")
 	to_chat(src, span_borer("<i>[B.truename] says:</i> [input]"))
 
-/mob/living/simple_animal/borer/Life()
+/mob/living/simple_animal/borer/Life(seconds_per_tick = SSMOBS_DT, times_fired)
 
 	..()
 
@@ -325,13 +325,13 @@ GLOBAL_VAR_INIT(total_borer_hosts_needed, 3)
 			if(victim.stat == DEAD)
 				chemicals++
 			else if(chemicals < 250)
-				chemicals+=2
+				chemicals+=1*seconds_per_tick
 			chemicals = min(250, chemicals)
 
 
 		if(stat != DEAD && victim.stat != DEAD)
 
-			if(victim.reagents.has_reagent(/datum/reagent/consumable/sugar))
+			if(victim.has_reagent(/datum/reagent/consumable/sugar))
 				if(!docile || waketimerid)
 					if(controlling)
 						to_chat(victim, span_warning("You feel the soporific flow of sugar in your host's blood, lulling you into docility."))
@@ -356,10 +356,10 @@ GLOBAL_VAR_INIT(total_borer_hosts_needed, 3)
 					victim.release_control()
 					return
 
-				if(prob(5))
-					victim.adjustOrganLoss(ORGAN_SLOT_BRAIN, rand(1,2))
+				if(SPT_PROB(2.5, seconds_per_tick))
+					victim.adjustOrganLoss(ORGAN_SLOT_BRAIN, rand(0.5 * seconds_per_tick, 1 * seconds_per_tick))
 
-				if(prob(victim.getOrganLoss(ORGAN_SLOT_BRAIN)/10))
+				if(SPT_PROB(victim.getOrganLoss(ORGAN_SLOT_BRAIN)/20, seconds_per_tick))
 					victim.say("*[pick(list("blink","blink_r","choke","aflap","drool","twitch","twitch_s","gasp"))]")
 
 /mob/living/simple_animal/borer/proc/wakeup()
@@ -636,7 +636,7 @@ GLOBAL_VAR_INIT(total_borer_hosts_needed, 3)
 		to_chat(src, span_notice("You send a jolt of energy to your host, reviving them!"))
 		victim.grab_ghost(force = TRUE) //brings the host back, no eggscape
 		C.emote("gasp")
-		C.set_jitter(100)
+		C.set_timed_status_effect(200 SECONDS, /datum/status_effect/jitter, only_if_higher = TRUE)
 
 /mob/living/simple_animal/borer/verb/bond_brain()
 	set category = "Borer"
@@ -743,7 +743,7 @@ GLOBAL_VAR_INIT(total_borer_hosts_needed, 3)
 		to_chat(src, span_warning("You need 75 chems to punish your host."))
 		return
 
-	var/limb = pick(victim.bodyparts)
+	var/limb = victim.get_random_bodypart()
 	limb = parse_zone(limb)
 	victim.apply_damage(50, STAMINA, limb)
 

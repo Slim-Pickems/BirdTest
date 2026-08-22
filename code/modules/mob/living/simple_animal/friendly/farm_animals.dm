@@ -39,25 +39,28 @@
 	AddComponent(/datum/component/udder)
 	. = ..()
 
-/mob/living/simple_animal/hostile/retaliate/goat/Life()
+/mob/living/simple_animal/hostile/retaliate/goat/Life(seconds_per_tick = SSMOBS_DT, times_fired)
 	. = ..()
 	if(.)
 		//chance to go crazy and start wacking stuff
-		if(!enemies.len && prob(1))
+		if(!enemies.len && SPT_PROB(0.5, seconds_per_tick))
 			Retaliate()
 
-		if(enemies.len && prob(10))
+		if(enemies.len && SPT_PROB(5, seconds_per_tick))
 			enemies = list()
 			LoseTarget()
 			src.visible_message(span_notice("[src] calms down."))
-	if(stat == CONSCIOUS)
-		eat_plants()
-		if(!pulledby)
-			for(var/direction in shuffle(list(1,2,4,8,5,6,9,10)))
-				var/step = get_step(src, direction)
-				if(step)
-					if(locate(/obj/structure/spacevine) in step || locate(/obj/structure/glowshroom) in step)
-						Move(step, get_dir(src, step))
+	if(stat != CONSCIOUS)
+		return
+
+	eat_plants()
+	if(pulledby)
+		return
+
+	for(var/direction in shuffle(list(1,2,4,8,5,6,9,10)))
+		var/step = get_step(src, direction)
+		if(step && ((locate(/obj/structure/spacevine) in step) || (locate(/obj/structure/glowshroom) in step)))
+			Move(step, get_dir(src, step))
 
 /mob/living/simple_animal/hostile/retaliate/goat/Retaliate()
 	..()
@@ -82,119 +85,6 @@
 
 	if(eaten && prob(10))
 		say("Nom")
-
-/mob/living/simple_animal/hostile/retaliate/goat/AttackingTarget()
-	. = ..()
-	if(. && ishuman(target))
-		var/mob/living/carbon/human/H = target
-		if(istype(H.dna.species, /datum/species/pod))
-			var/obj/item/bodypart/NB = pick(H.bodyparts)
-			H.visible_message(
-				span_warning("[src] takes a big chomp out of [H]!"), \
-				span_userdanger("[src] takes a big chomp out of your [NB]!"))
-			NB.dismember()
-//cow
-/mob/living/simple_animal/cow
-	name = "cow"
-	desc = "Known for their milk, just don't tip them over."
-	icon_state = "cow"
-	icon_living = "cow"
-	icon_dead = "cow_dead"
-	icon_gib = "cow_gib"
-	gender = FEMALE
-	mob_biotypes = MOB_ORGANIC|MOB_BEAST
-	speak = list("moo?","moo","MOOOOOO")
-	speak_emote = list("moos","moos hauntingly")
-	emote_hear = list("brays.")
-	emote_see = list("shakes its head.")
-	speak_chance = 1
-	turns_per_move = 5
-	see_in_dark = 6
-	butcher_results = list(/obj/item/food/meat/slab = 6)
-	response_help_continuous = "pets"
-	response_help_simple = "pet"
-	response_disarm_continuous = "gently pushes aside"
-	response_disarm_simple = "gently push aside"
-	response_harm_continuous = "kicks"
-	response_harm_simple = "kick"
-	attack_verb_continuous = "kicks"
-	attack_verb_simple = "kick"
-	attack_sound = 'sound/weapons/punch1.ogg'
-	health = 50
-	maxHealth = 50
-	blood_volume = BLOOD_VOLUME_NORMAL
-	food_type = list(/obj/item/food/grown/wheat)
-	tame_chance = 25
-	bonus_tame_chance = 15
-	footstep_type = FOOTSTEP_MOB_SHOE
-
-/mob/living/simple_animal/cow/Initialize()
-	AddComponent(/datum/component/udder)
-	. = ..()
-
-/mob/living/simple_animal/cow/tamed()
-	. = ..()
-	can_buckle = TRUE
-	buckle_lying = FALSE
-	var/datum/component/riding/D = LoadComponent(/datum/component/riding)
-	D.set_riding_offsets(RIDING_OFFSET_ALL, list(TEXT_NORTH = list(0, 8), TEXT_SOUTH = list(0, 8), TEXT_EAST = list(-2, 8), TEXT_WEST = list(2, 8)))
-	D.set_vehicle_dir_layer(SOUTH, ABOVE_MOB_LAYER)
-	D.set_vehicle_dir_layer(NORTH, OBJ_LAYER)
-	D.set_vehicle_dir_layer(EAST, OBJ_LAYER)
-	D.set_vehicle_dir_layer(WEST, OBJ_LAYER)
-	D.drive_verb = "ride"
-
-/mob/living/simple_animal/cow/attack_hand(mob/living/carbon/M)
-	if(!stat && M.a_intent == INTENT_DISARM && icon_state != icon_dead)
-		M.visible_message(span_warning("[M] tips over [src]."),
-			span_notice("You tip over [src]."))
-		to_chat(src, span_userdanger("You are tipped over by [M]!"))
-		Paralyze(60, ignore_canstun = TRUE)
-		icon_state = icon_dead
-		addtimer(CALLBACK(src, PROC_REF(cow_tipped), M), rand(20,50))
-
-	else
-		..()
-
-/mob/living/simple_animal/cow/proc/cow_tipped(mob/living/carbon/M)
-	if(QDELETED(M) || stat)
-		return
-	icon_state = icon_living
-	var/external
-	var/internal
-	if(prob(75))
-		var/text = pick("imploringly.", "pleadingly.",
-			"with a resigned expression.")
-		external = "[src] looks at [M] [text]"
-		internal = "You look at [M] [text]"
-	else
-		external = "[src] seems resigned to its fate."
-		internal = "You resign yourself to your fate."
-	visible_message(span_notice("[external]"),
-		span_revennotice("[internal]"))
-
-///Wisdom cow, gives XP to a random skill and speaks wisdoms
-/mob/living/simple_animal/cow/wisdom
-	name = "wisdom cow"
-	desc = "Known for its wisdom, shares it with all"
-	tame_chance = 0
-	bonus_tame_chance = 0
-	speak_chance = 15
-
-/mob/living/simple_animal/cow/wisdom/Initialize()
-	. = ..()
-	speak = GLOB.wisdoms //Done here so it's setup properly
-
-///Give intense wisdom to the attacker if they're being friendly about it
-/mob/living/simple_animal/cow/wisdom/attack_hand(mob/living/carbon/M)
-	if(!stat && M.a_intent == INTENT_HELP)
-		to_chat(M, span_nicegreen("[src] whispers you some intense wisdoms and then disappears!"))
-		M.mind?.adjust_experience(pick(GLOB.skill_types), 500)
-		do_smoke(1, get_turf(src))
-		qdel(src)
-		return
-	return ..()
-
 
 /mob/living/simple_animal/chick
 	name = "\improper chick"
@@ -234,17 +124,17 @@
 	pixel_x = base_pixel_x + rand(-6, 6)
 	pixel_y = base_pixel_y + rand(0, 10)
 
-/mob/living/simple_animal/chick/Life()
+/mob/living/simple_animal/chick/Life(seconds_per_tick = SSMOBS_DT, times_fired)
 	. =..()
 	if(!.)
 		return
 	if(!stat && !ckey)
-		amount_grown += rand(1,2)
+		amount_grown += rand(0.5 * seconds_per_tick, 1 * seconds_per_tick)
 		if(amount_grown >= 100)
 			new /mob/living/simple_animal/chicken(src.loc)
 			qdel(src)
 
-/mob/living/simple_animal/chick/holo/Life()
+/mob/living/simple_animal/chick/holo/Life(seconds_per_tick = SSMOBS_DT, times_fired)
 	..()
 	amount_grown = 0
 
@@ -264,7 +154,7 @@
 	speak_chance = 2
 	turns_per_move = 3
 	butcher_results = list(/obj/item/food/meat/slab/chicken = 2)
-	var/egg_type = /obj/item/reagent_containers/food/snacks/egg
+	var/egg_type = /obj/item/food/egg
 	food_type = list(/obj/item/food/grown/wheat)
 	response_help_continuous = "pets"
 	response_help_simple = "pet"
@@ -317,22 +207,22 @@
 	else
 		..()
 
-/mob/living/simple_animal/chicken/Life()
+/mob/living/simple_animal/chicken/Life(seconds_per_tick = SSMOBS_DT, times_fired)
 	. =..()
 	if(!.)
 		return
-	if((!stat && prob(3) && eggsleft > 0) && egg_type)
+	if((!stat && SPT_PROB(1.5, seconds_per_tick) && eggsleft > 0) && egg_type)
 		visible_message(span_alertalien("[src] [pick(layMessage)]"))
 		eggsleft--
 		var/obj/item/E = new egg_type(get_turf(src))
-		E.pixel_x = E.base_pixel_x + rand(-6,6)
-		E.pixel_y = E.base_pixel_y + rand(-6,6)
+		E.pixel_x = E.base_pixel_x + rand(-6, 6)
+		E.pixel_y = E.base_pixel_y + rand(-6, 6)
 		if(eggsFertile)
 			if(chicken_count < MAX_CHICKENS && prob(25))
 				START_PROCESSING(SSobj, E)
 
-/obj/item/reagent_containers/food/snacks/egg/var/amount_grown = 0
-/obj/item/reagent_containers/food/snacks/egg/process(seconds_per_tick)
+/obj/item/food/egg/var/amount_grown = 0
+/obj/item/food/egg/process(seconds_per_tick)
 	if(isturf(loc))
 		amount_grown += rand(1,2) * seconds_per_tick
 		if(amount_grown >= 200)
@@ -360,7 +250,7 @@
 	speak_chance = 2
 	turns_per_move = 3
 	butcher_results = list(/obj/item/food/meat/slab/chicken = 2)
-	var/egg_type = /obj/item/reagent_containers/food/snacks/egg
+	var/egg_type = /obj/item/food/egg
 	food_type = list(/obj/item/food/grown/wheat)
 	response_help_continuous = "pets"
 	response_help_simple = "pet"
@@ -415,21 +305,6 @@
 	else
 		..()
 
-/mob/living/simple_animal/hostile/retaliate/chicken/Life()
-	. =..()
-	if(!.)
-		return
-	if((!stat && prob(3) && eggsleft > 0) && egg_type)
-		visible_message(span_alertalien("[src] [pick(layMessage)]"))
-		eggsleft--
-		var/obj/item/E = new egg_type(get_turf(src))
-		E.pixel_x = E.base_pixel_x + rand(-6,6)
-		E.pixel_y = E.base_pixel_y + rand(-6,6)
-		if(eggsFertile)
-			if(chicken_count < MAX_CHICKENS && prob(25))
-				START_PROCESSING(SSobj, E)
-
-
 /mob/living/simple_animal/deer
 	name = "doe"
 	desc = "A gentle, peaceful forest animal. How did this get into space?"
@@ -473,7 +348,7 @@
 	speak = list()
 	speak_emote = list("sniffles","twitches")
 	emote_hear = list("hops.")
-	emote_see = list("hops around","bounces up and down")
+	emote_see = list("hops around.","bounces up and down.")
 	butcher_results = list(/obj/item/food/meat/slab = 1)
 	food_type = /obj/item/food/grown/carrot
 	minbodytemp = 0

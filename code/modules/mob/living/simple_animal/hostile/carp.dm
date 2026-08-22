@@ -34,6 +34,7 @@
 	attack_verb_continuous = "bites"
 	attack_verb_simple = "bite"
 	attack_sound = 'sound/weapons/bite.ogg'
+	sharpness = SHARP_POINTY
 	speak_emote = list("gnashes")
 
 	//Space carp aren't affected by cold.
@@ -41,7 +42,7 @@
 	minbodytemp = 0
 	maxbodytemp = 1500
 	faction = list("carp", "mining")
-	movement_type = FLYING
+	is_flying_animal = TRUE
 	pressure_resistance = 200
 
 	var/random_color = TRUE //if the carp uses random coloring
@@ -111,7 +112,7 @@
 		adjustBruteLoss(5)
 		qdel(tasty_plastic)
 
-/mob/living/simple_animal/hostile/carp/Life()
+/mob/living/simple_animal/hostile/carp/Life(seconds_per_tick = SSMOBS_DT, times_fired)
 	. = ..()
 	if(stat == CONSCIOUS)
 		chomp_plastic()
@@ -203,10 +204,10 @@
 	if(.)
 		regen_cooldown = world.time + REGENERATION_DELAY
 
-/mob/living/simple_animal/hostile/carp/megacarp/Life()
+/mob/living/simple_animal/hostile/carp/megacarp/Life(seconds_per_tick = SSMOBS_DT, times_fired)
 	. = ..()
 	if(regen_cooldown < world.time)
-		heal_overall_damage(4)
+		heal_overall_damage(2 * seconds_per_tick)
 	if(!rideable && src.mind)
 		can_buckle = TRUE
 		buckle_lying = FALSE

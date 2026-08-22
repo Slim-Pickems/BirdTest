@@ -114,7 +114,7 @@
 	if(generic_message && M != user)
 		to_chat(M, span_danger("[src] emits a blinding light!"))
 	if(targeted)
-		if(M.flash_act(1, 1))
+		if(M.flash_act(1, 1) & FLASH_EFFECT)
 			if(M.confused < power)
 				var/diff = power * CONFUSION_STACK_MAX_MULTIPLIER - M.confused
 				M.confused += min(power, diff)
@@ -131,7 +131,7 @@
 		else
 			to_chat(M, span_danger("[src] fails to blind you!"))
 	else
-		if(M.flash_act())
+		if(M.flash_act() & FLASH_EFFECT)
 			var/diff = power * CONFUSION_STACK_MAX_MULTIPLIER - M.confused
 			M.confused += min(power, diff)
 
@@ -250,7 +250,7 @@
 	if(generic_message && M != user)
 		to_chat(M, span_notice("[src] emits a soothing light..."))
 	if(targeted)
-		if(M.flash_act(1, 1))
+		if(M.flash_act(1, 1) & FLASH_EFFECT)
 			var/hypnosis = FALSE
 			if(M.hypnosis_vulnerable())
 				hypnosis = TRUE
@@ -260,7 +260,7 @@
 			if(!hypnosis)
 				to_chat(M, span_hypnophrase("The light makes you feel oddly relaxed..."))
 				M.confused += min(M.confused + 10, 20)
-				M.dizziness += min(M.dizziness + 10, 20)
+				M.adjust_timed_status_effect(20 SECONDS, /datum/status_effect/dizziness, max_duration = 40 SECONDS)
 				M.drowsyness += min(M.drowsyness + 10, 20)
 				M.apply_status_effect(STATUS_EFFECT_PACIFY, 100)
 			else
@@ -271,9 +271,9 @@
 		else
 			to_chat(M, span_danger("[src] fails to blind you!"))
 
-	else if(M.flash_act())
+	else if(M.flash_act() & FLASH_EFFECT)
 		to_chat(M, span_notice("Such a pretty light..."))
 		M.confused += min(M.confused + 4, 20)
-		M.dizziness += min(M.dizziness + 4, 20)
+		M.adjust_timed_status_effect(8 SECONDS, /datum/status_effect/dizziness, max_duration = 40 SECONDS)
 		M.drowsyness += min(M.drowsyness + 4, 20)
 		M.apply_status_effect(STATUS_EFFECT_PACIFY, 40)

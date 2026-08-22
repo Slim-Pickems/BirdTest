@@ -115,7 +115,7 @@ Difficulty: Hard
 		if(3)
 			disorienting_scream()
 
-/mob/living/simple_animal/hostile/megafauna/wendigo/Life()
+/mob/living/simple_animal/hostile/megafauna/wendigo/Life(seconds_per_tick = SSMOBS_DT, times_fired)
 	. = ..()
 	if(!.)
 		return
@@ -184,7 +184,7 @@ Difficulty: Hard
 	animate(src, pixel_z = rand(5, 15), time = 1, loop = 6)
 	animate(pixel_z = 0, time = 1)
 	for(var/mob/living/L in get_hearers_in_view(7, src) - src)
-		L.Dizzy(6)
+		L.set_timed_status_effect(14 SECONDS, /datum/status_effect/dizziness, only_if_higher = TRUE)
 		to_chat(L, span_danger("[capitalize(src)] screams loudly!"))
 	SetRecoveryTime(30, 0)
 	SLEEP_CHECK_DEATH(12)

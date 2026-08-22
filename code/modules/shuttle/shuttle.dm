@@ -219,6 +219,7 @@
 	var/json_key
 	//Setting this to false will prevent the roundstart_template from being loaded on Initiallize(). You should set this to false if this loads a subship on a ship map template
 	var/load_template_on_initialize = TRUE
+	var/outpost_special_dock_perms = FALSE //gives the ship we're spawning special dock perms on the outpost
 	/// The docking ticket of the ship docking to this port.
 	var/datum/docking_ticket/current_docking_ticket
 	/// Moves docking port around in it's "box" so that any ship can land in this "box" think of this as, whatever the height and width are set to on initialize, anything smaller than the "box" can land in it with this on
@@ -234,7 +235,7 @@
 	///ditto
 	var/datum/map_template/outpost/hangar/initial_hangar_template
 
-/obj/docking_port/stationary/Initialize(mapload)
+/obj/docking_port/stationary/Initialize(mapload, datum/overmap/dock_holder)
 	. = ..()
 	SSshuttle.stationary += src
 	initial_location = list("x" = x, "y" = y, "z" = z)
@@ -246,6 +247,9 @@
 			T.flags_1 |= NO_RUINS_1
 		if(SSshuttle.initialized && load_template_on_initialize) // If the docking port is loaded via map but SSshuttle has already init (therefore this would never be called)
 			INVOKE_ASYNC(src, PROC_REF(load_roundstart))
+	if(istype(dock_holder, /datum/overmap/outpost))
+		var/datum/overmap/outpost/parent_outpost = dock_holder
+		LAZYADD(parent_outpost.main_floor_docks,src)
 
 	#ifdef DOCKING_PORT_HIGHLIGHT
 	highlight("#f00")
@@ -263,7 +267,7 @@
 		if(!roundstart_template)
 			CRASH("Invalid path ([template]) passed to docking port.")
 
-		var/datum/overmap/ship/controlled/new_ship = new(SSovermap.get_overmap_object_by_location(src), , template, FALSE) //Don't instantiate, we handle that ourselves
+		var/datum/overmap/ship/controlled/new_ship = new(SSovermap.get_overmap_object_by_location(src), , template, FALSE, outpost_special_dock_perms) //Don't instantiate, we handle that ourselves
 		new_ship.connect_new_shuttle_port(SSshuttle.action_load(template, new_ship, src))
 
 /**
@@ -468,6 +472,9 @@
 	///List of all stationary docking ports that spawned on the ship roundstart, used for docking to other ships.
 	var/list/obj/docking_port/stationary/docking_points
 
+	///The faction this shuttle is registered under.
+	var/datum/faction/registered_faction
+
 	/// Does this shuttle play sounds upon landing and takeoff?
 	var/shuttle_sounds = TRUE
 	/// The take off sound to be played
@@ -532,6 +539,7 @@
 
 
 /obj/docking_port/mobile/proc/load(datum/map_template/shuttle/source_template)
+	registered_faction = source_template.faction
 	shuttle_areas = list()
 	var/list/all_turfs = return_ordered_turfs(x, y, z, dir)
 	for(var/turf/curT as anything in all_turfs)
@@ -627,25 +635,37 @@
 		// attempt to move us where we currently are, it will get weird.
 			return SHUTTLE_ALREADY_DOCKED
 
-	if(S.adjust_dock_for_landing && intention_to_dock)
+	if(S.adjust_dock_for_landing)
 		if(S.is_adjusting_now)
 			return SHUTTLE_PORT_IS_ADJUSTING
-		S.adjust_dock_to_shuttle(src)
+		//since we width/height is more like a box where the ship can land IN, we can easily check if we can land here
+		if(height > S.height)
+			if (width > S.height && height > S.width)
+				return SHUTTLE_ADJUSTABLE_OUR_HEIGHT_TOO_LARGE
+		if(width > S.width)
+			if (height > S.width && width > S.height)
+				return SHUTTLE_ADJUSTABLE_OUR_WIDTH_TOO_LARGE
+		//hopefully that reduces the amount of procesing nesaary before running this proc's math
+		if(intention_to_dock)
+			S.adjust_dock_to_shuttle(src)
+
 
 	if(istype(S, /obj/docking_port/stationary/transit))
 		return SHUTTLE_CAN_DOCK
 
-	if(tow_dwidth > S.dwidth)
-		return SHUTTLE_DWIDTH_TOO_LARGE
+	//if we are trying to dock to an adjustable port, but we are only checking if we can even land, dont actually check since it hasn't adjusted yet
+	if(!S.adjust_dock_for_landing || S.adjust_dock_for_landing && intention_to_dock)
+		if(tow_dwidth > S.dwidth)
+			return SHUTTLE_DWIDTH_TOO_LARGE
 
-	if(tow_rwidth > S.width-S.dwidth)
-		return SHUTTLE_WIDTH_TOO_LARGE
+		if(tow_rwidth > S.width-S.dwidth)
+			return SHUTTLE_WIDTH_TOO_LARGE
 
-	if(tow_dheight > S.dheight)
-		return SHUTTLE_DHEIGHT_TOO_LARGE
+		if(tow_dheight > S.dheight)
+			return SHUTTLE_DHEIGHT_TOO_LARGE
 
-	if(tow_rheight > S.height-S.dheight)
-		return SHUTTLE_HEIGHT_TOO_LARGE
+		if(tow_rheight > S.height-S.dheight)
+			return SHUTTLE_HEIGHT_TOO_LARGE
 
 	for(var/obj/docking_port/stationary/current_port as anything in docking_points)
 		//if any of our docks has disable_on_owner_ship_dock set, has something docked to us, and we aren't going to a transit zone or an adjustable dock(usually planetary), don't land
@@ -653,13 +673,15 @@
 			return SHUTTLE_OUR_MOBILEDOCK_FORBIDS_DOCKING
 
 	//if the docking port has disable_on_owner_ship_dock set and the target ship is docked to something, don't land. very much don't land.
-	if(S.disable_on_owner_ship_dock && S.owner_ship.docked)
+	if(S.disable_on_owner_ship_dock && (!istype(S.owner_ship.docked, /obj/docking_port/stationary/transit)))
 		return SHUTTLE_TARGET_MOBILEDOCK_FORBIDS_DOCKING
 
-	for(var/turf/closed/indestructible/edgeturf as anything in return_ordered_turfs(S.x, S.y, S.z, S.dir))
-		if(!istype(edgeturf))
-			continue
-		return SHUTTLE_TOUCHES_EDGE
+	//see above; adjustable port will not have adjusted and thus this reading will be wrong
+	if(!S.adjust_dock_for_landing || S.adjust_dock_for_landing && intention_to_dock)
+		for(var/turf/closed/indestructible/edgeturf as anything in return_ordered_turfs(S.x, S.y, S.z, S.dir))
+			if(!istype(edgeturf))
+				continue
+			return SHUTTLE_TOUCHES_EDGE
 
 	return SHUTTLE_CAN_DOCK
 

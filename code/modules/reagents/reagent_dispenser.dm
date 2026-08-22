@@ -13,7 +13,7 @@
 
 /obj/structure/reagent_dispensers/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1, attack_dir)
 	. = ..()
-	if(. && obj_integrity > 0)
+	if(. && atom_integrity > 0)
 		if(tank_volume && (damage_flag == "bullet" || damage_flag == "laser"))
 			boom()
 
@@ -148,7 +148,7 @@
 /obj/structure/reagent_dispensers/water_cooler
 	name = "liquid cooler"
 	desc = "A machine that dispenses liquid to drink."
-	icon = 'icons/obj/vending.dmi'
+	icon = 'icons/obj/structures/watercooler.dmi'
 	icon_state = "water_cooler"
 	anchored = TRUE
 	tank_volume = 500
@@ -174,6 +174,11 @@
 	var/obj/item/reagent_containers/food/drinks/sillycup/S = new(get_turf(src))
 	user.put_in_hands(S)
 	paper_cups--
+
+/obj/structure/reagent_dispensers/water_cooler/bullet_act(obj/projectile/hitting_projectile)
+	. = ..()
+	if(istype(hitting_projectile, /obj/projectile/kiss) && paper_cups < src::paper_cups)
+		flick("water_cooler_easteregg", src)
 
 /obj/structure/reagent_dispensers/beerkeg
 	name = "beer keg"
@@ -201,7 +206,7 @@
 /obj/structure/reagent_dispensers/servingdish
 	name = "serving dish"
 	desc = "A dish full of food slop for your bowl."
-	icon = 'icons/obj/kitchen.dmi'
+	icon = 'icons/obj/machines/kitchen.dmi'
 	icon_state = "serving"
 	anchored = TRUE
 	reagent_id = /datum/reagent/consumable/nutraslop

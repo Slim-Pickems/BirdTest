@@ -11,7 +11,7 @@
 	var/basic_mob_flags = NONE
 
 	///How much stamina the mob recovers per second
-	var/stamina_recovery = 5
+	var/stamina_recovery = 10
 
 	///how much damage this basic mob does to objects, if any.
 	var/obj_damage = 0
@@ -36,7 +36,6 @@
 
 	/// 1 for full damage , 0 for none , -1 for 1:1 heal from that source.
 	var/list/damage_coeff = list(BRUTE = 1, BURN = 1, TOX = 1, CLONE = 1, STAMINA = 0, OXY = 1)
-	var/datum/armor/armor
 
 	///Verbs used for speaking e.g. "Says" or "Chitters". This can be elementized
 	var/list/speak_emote = list()
@@ -81,7 +80,7 @@
 	///Leaving something at 0 means it's off - has no maximum.
 	var/list/habitable_atmos = list("min_oxy" = 5, "max_oxy" = 0, "min_plas" = 0, "max_plas" = 1, "min_co2" = 0, "max_co2" = 5, "min_n2" = 0, "max_n2" = 0)
 	///This damage is taken when atmos doesn't fit all the requirements above. Set to 0 to avoid adding the atmos_requirements element.
-	var/unsuitable_atmos_damage = 1
+	var/unsuitable_atmos_damage = 0.5
 
 	///Minimal body temperature without receiving damage
 	var/minimum_survivable_temperature = NPC_DEFAULT_MIN_TEMP
@@ -146,7 +145,7 @@
 	if(staminaloss > 0)
 		adjustStaminaLoss(-stamina_recovery * seconds_per_tick, FALSE, TRUE)
 
-/mob/living/basic/say_mod(input, list/message_mods = list())
+/mob/living/basic/say_mod(input, datum/language/message_language, list/message_mods = list())
 	if(length(speak_emote))
 		verb_say = pick(speak_emote)
 	return ..()

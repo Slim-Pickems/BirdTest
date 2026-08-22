@@ -620,7 +620,7 @@
 	N.dna_lock = M.dna_lock
 	N.maint_access = M.maint_access
 	N.strafe = M.strafe
-	N.obj_integrity = M.obj_integrity //This is not a repair tool
+	N.atom_integrity = M.atom_integrity //This is not a repair tool
 	M.wreckage = 0
 	qdel(M)
 	playsound(get_turf(N),'sound/items/ratchet.ogg',50,TRUE)
@@ -654,8 +654,8 @@
 	result_mech = /obj/mecha/combat/gygax/charger/inteq
 
 /obj/item/mecha_parts/mecha_equipment/conversion_kit/mp_gygax
-	name = "NT-501p-MP Conversion Kit"
-	desc = "A NT made conversion kit for a 501p combat exosuit, to convert it to the lightweight NT-501p-MP skirmishing exosuit."
+	name = "MW-501p-MP Conversion Kit"
+	desc = "A Makosso-Warra made conversion kit for a 501p combat exosuit, to convert it to the lightweight MW-501p-MP skirmishing exosuit."
 	source_mech = list(/obj/mecha/combat/gygax,/obj/mecha/combat/gygax/dark)
 	result_mech = /obj/mecha/combat/gygax/charger/mp
 

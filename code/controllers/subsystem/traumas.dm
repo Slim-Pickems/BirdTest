@@ -74,7 +74,6 @@ SUBSYSTEM_DEF(traumas)
 
 		"skeletons" = typecacheof(list(
 			/obj/item/organ/tongue/bone, /obj/item/clothing/suit/armor/bone, /obj/item/stack/sheet/bone,
-			/obj/item/food/meat/slab/human/mutant/skeleton,
 			/obj/effect/decal/remains/human)),
 
 		"conspiracies" = typecacheof(list(
@@ -125,7 +124,7 @@ SUBSYSTEM_DEF(traumas)
 			/obj/item/melee/baton/abductor, /obj/item/radio/headset/abductor, /obj/item/scalpel/alien, /obj/item/hemostat/alien,
 			/obj/item/retractor/alien, /obj/item/circular_saw/alien, /obj/item/surgicaldrill/alien, /obj/item/cautery/alien,
 			/obj/item/clothing/head/helmet/abductor, /obj/structure/bed/abductor, /obj/structure/table_frame/abductor,
-			/obj/structure/table/abductor, /obj/structure/table/optable/abductor, /obj/structure/closet/abductor, /obj/item/organ/heart/gland,
+			/obj/structure/table/abductor, /obj/structure/closet/abductor, /obj/item/organ/heart/gland,
 			/obj/machinery/abductor, /obj/item/crowbar/abductor, /obj/item/screwdriver/abductor, /obj/item/weldingtool/abductor,
 			/obj/item/wirecutters/abductor, /obj/item/wrench/abductor, /obj/item/stack/sheet/mineral/abductor)),
 
@@ -135,12 +134,12 @@ SUBSYSTEM_DEF(traumas)
 
 		"anime" = typecacheof(list(
 			/obj/item/clothing/under/costume/schoolgirl, /obj/item/food/sashimi,
-			/obj/item/reagent_containers/food/snacks/chawanmushi,
+			/obj/item/food/chawanmushi,
 			/obj/item/reagent_containers/food/drinks/bottle/sake, /obj/item/throwing_star,
 			/obj/item/clothing/suit/space/space_ninja,
 			/obj/item/clothing/mask/gas/space_ninja, /obj/item/clothing/shoes/space_ninja, /obj/item/clothing/gloves/space_ninja,
 			/obj/item/melee/sword/vibro, /obj/item/melee/sword/energy_katana, /obj/item/toy/katana,
-			/obj/item/melee/sword/katana, /obj/structure/window/paperframe, /obj/structure/mineral_door/paperframe))
+			/obj/structure/window/paperframe, /obj/structure/mineral_door/paperframe))
 	)
 
 	phobia_turfs = list(
@@ -159,7 +158,7 @@ SUBSYSTEM_DEF(traumas)
 		"conspiracies" = typecacheof(list(/datum/species/abductor, /datum/species/lizard)),
 		"robots" = typecacheof(list(/datum/species/android, /datum/species/ipc)),
 		"aliens" = typecacheof(list(
-			/datum/species/abductor, /datum/species/jelly, /datum/species/pod)),
+			/datum/species/abductor)),
 		"spiders" = typecacheof(list(/datum/species/spider))
 	)
 

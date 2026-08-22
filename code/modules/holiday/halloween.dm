@@ -8,14 +8,14 @@
 /datum/recipe/sugarcookie/spookyskull
 	reagents_list = list(/datum/reagent/consumable/flour = 5, /datum/reagent/consumable/sugar = 5, /datum/reagent/consumable/milk = 5)
 	items = list(
-		/obj/item/reagent_containers/food/snacks/egg,
+		/obj/item/food/egg,
 	)
 	result = /obj/item/food/cookie/sugar/spookyskull
 
 /datum/recipe/sugarcookie/spookycoffin
 	reagents_list = list(/datum/reagent/consumable/flour = 5, /datum/reagent/consumable/sugar = 5, /datum/reagent/consumable/coffee = 5)
 	items = list(
-		/obj/item/reagent_containers/food/snacks/egg,
+		/obj/item/food/egg,
 	)
 	result = /obj/item/food/cookie/sugar/spookycoffin
 
@@ -54,7 +54,8 @@
 		return
 	else
 		var/mob/living/carbon/human/H = new(loc)
-		H.makeSkeleton()
+		ADD_TRAIT(H, TRAIT_DISFIGURED, TRAIT_GENERIC)
+		H.set_species(/datum/species/skeleton)
 		H.health = 1e5
 		insert(H)
 		trapped_mob = H
@@ -126,10 +127,10 @@
 	status_flags |= GODMODE
 	timer = rand(1,15)
 
-/mob/living/simple_animal/shade/howling_ghost/Life()
+/mob/living/simple_animal/shade/howling_ghost/Life(seconds_per_tick = SSMOBS_DT, times_fired)
 	..()
 	timer--
-	if(prob(20))
+	if(SPT_PROB(10, seconds_per_tick))
 		roam()
 	if(timer == 0)
 		spooky_ghosty()

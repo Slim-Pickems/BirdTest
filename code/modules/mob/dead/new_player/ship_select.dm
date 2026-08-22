@@ -56,6 +56,12 @@
 				to_chat(spawnee, span_warning("You cannot join this ship anymore, as its join mode has changed!"))
 				return
 
+			var/datum/faction/registered_faction = target.shuttle_port.registered_faction
+			var/datum/language/official_lang = initial(registered_faction.official_language)
+			if(official_lang != spawnee.client.prefs.native_language && spawnee.client.prefs.learned_languages[official_lang] != LANGUAGE_FLUENT && \
+				tgui_alert(spawnee, "Your character does not fully understand this faction's official language ([initial(official_lang.name)]), are you sure?", "Official language", list("Yes", "No")) != "Yes")
+				return // pop-up warning for new players that forgot to set their
+
 			ui.close()
 			var/datum/job/selected_job = locate(params["job"]) in target.job_slots
 			//boots you out if you're banned from officer roles
@@ -104,12 +110,15 @@
 			var/ship_loc
 			var/datum/overmap_star_system/selected_system //the star system we want to spawn in
 
-			if(length(SSovermap.outposts) > 1)
-				var/datum/overmap/outpost/temp_loc = input(spawnee, "Select outpost to spawn at") as null|anything in SSovermap.outposts
+			var/list/valid_spawns = SSovermap.get_spawn_outposts()
+
+			if(valid_spawns > 1)
+				var/datum/overmap/outpost/temp_loc = input(spawnee, "Select outpost to spawn at") as null|anything in valid_spawns
 				if(!temp_loc)
 					return
 				selected_system = temp_loc.current_overmap
 				ship_loc = temp_loc
+
 			else
 				ship_loc = SSovermap.outposts[1]
 				selected_system = SSovermap.tracked_star_systems[1]

@@ -24,21 +24,6 @@
 	message = "grumbles!"
 	emote_type = EMOTE_AUDIBLE
 
-/datum/emote/living/carbon/human/handshake
-	key = "handshake"
-	message = "shakes their own hands."
-	message_param = "shakes hands with %t."
-	hands_use_check = TRUE
-	emote_type = EMOTE_AUDIBLE
-
-/datum/emote/living/carbon/human/hug
-	key = "hug"
-	key_third_person = "hugs"
-	message = "hugs themself."
-	message_param = "hugs %t."
-	hands_use_check = TRUE
-	emote_type = EMOTE_AUDIBLE
-
 /datum/emote/living/carbon/human/mumble
 	key = "mumble"
 	key_third_person = "mumbles"
@@ -108,6 +93,20 @@
 		return
 	if(!isnull(user.getorgan(/obj/item/organ/tail)) || (isvox(user)))
 		return 'sound/voice/lizard/tailthump.ogg' //https://freesound.org/people/TylerAM/sounds/389665/
+
+/datum/emote/living/carbon/human/stomp
+	key = "stomp"
+	key_third_person = "stomps their foot"
+	message = "stomps their foot!"
+	emote_type = EMOTE_AUDIBLE
+	vary = TRUE
+
+/datum/emote/living/carbon/human/stomp/get_sound(mob/living/user)
+	if(ishuman(user))
+		if(!user.get_bodypart(BODY_ZONE_L_LEG) || !user.get_bodypart(BODY_ZONE_R_LEG))
+			return
+		else
+			return 'sound/voice/lizard/tailthump.ogg' //https://freesound.org/people/TylerAM/sounds/389665/
 
 /datum/emote/living/carbon/human/weh //lizard
 	key = "weh"

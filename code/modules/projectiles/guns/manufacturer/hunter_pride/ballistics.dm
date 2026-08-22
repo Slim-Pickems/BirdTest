@@ -123,7 +123,7 @@ EMPTY_GUN_HELPER(revolver/shadow)
 
 /obj/item/gun/ballistic/revolver/detective
 	name = "\improper HP Detective Special"
-	desc = "A small law enforcement firearm. Originally commissioned by Nanotrasen for their Private Investigation division, it has become extremely popular among independent civilians as a cheap, compact sidearm. Uses .38 Special rounds."
+	desc = "A small law enforcement firearm. Originally commissioned by Vigilitas Interstellar for their Private Investigation division, it has become extremely popular among independent civilians as a cheap, compact sidearm. Uses .38 Special rounds."
 	fire_sound = 'sound/weapons/gun/revolver/shot_light.ogg'
 	icon_state = "detective"
 	item_state = "hp_generic"
@@ -314,6 +314,9 @@ NO_MAG_GUN_HELPER(automatic/pistol/candor/factory)
 /obj/item/gun/ballistic/automatic/smg/firestorm/pan //spawns with pan magazine, can take sticks instead of just drums, not sure where this would be used, maybe erts?
 	default_ammo_type = /obj/item/ammo_box/magazine/c44_firestorm_mag/pan
 
+
+NO_MAG_GUN_HELPER(automatic/smg/firestorm)
+
 ///Shotguns
 
 /////////////////////////////
@@ -342,7 +345,7 @@ NO_MAG_GUN_HELPER(automatic/pistol/candor/factory)
 	weapon_weight = WEAPON_MEDIUM
 	force = 10
 	flags_1 = CONDUCT_1
-	slot_flags = ITEM_SLOT_BACK
+	slot_flags = ITEM_SLOT_BACK | ITEM_SLOT_SUITSTORE
 	default_ammo_type = /obj/item/ammo_box/magazine/internal/shot/dual
 	allowed_ammo_types = list(
 		/obj/item/ammo_box/magazine/internal/shot/dual,
@@ -390,12 +393,8 @@ NO_MAG_GUN_HELPER(automatic/pistol/candor/factory)
 		chambered = null
 		var/num_unloaded = 0
 		for(var/obj/item/ammo_casing/casing_bullet in get_ammo_list(FALSE, TRUE))
-			casing_bullet.forceMove(drop_location())
-			var/angle_of_movement =(rand(-3000, 3000) / 100) + dir2angle(turn(user.dir, 180))
-			casing_bullet.AddComponent(/datum/component/movable_physics, _horizontal_velocity = rand(450, 550) / 100, _vertical_velocity = rand(400, 450) / 100, _horizontal_friction = rand(20, 24) / 100, _z_gravity = PHYSICS_GRAV_STANDARD, _z_floor = 0, _angle_of_movement = angle_of_movement, _bounce_sound = casing_bullet.bounce_sfx_override)
-
+			eject_casing(user, casing_bullet)
 			num_unloaded++
-			SSblackbox.record_feedback("tally", "station_mess_created", 1, casing_bullet.name)
 		if (num_unloaded)
 			playsound(user, eject_sound, eject_sound_volume, eject_sound_vary)
 			update_appearance()
@@ -419,7 +418,7 @@ NO_MAG_GUN_HELPER(automatic/pistol/candor/factory)
 
 /obj/item/gun/ballistic/shotgun/doublebarrel/attackby(obj/item/A, mob/user, params)
 	if (!bolt_locked)
-		if(SEND_SIGNAL(src, COMSIG_PARENT_ATTACKBY, A, user, params) & COMPONENT_NO_AFTERATTACK)
+		if(SEND_SIGNAL(src, COMSIG_ATOM_ATTACKBY, A, user, params) & COMPONENT_NO_AFTERATTACK)
 			return TRUE
 		to_chat(user, span_notice("The [bolt_wording] is shut closed!"))
 		return
@@ -462,7 +461,7 @@ EMPTY_GUN_HELPER(shotgun/doublebarrel)
 	sawn_off = TRUE
 	weapon_weight = WEAPON_MEDIUM
 	w_class = WEIGHT_CLASS_NORMAL
-	slot_flags = ITEM_SLOT_BELT
+	slot_flags = ITEM_SLOT_BACK | ITEM_SLOT_SUITSTORE
 
 	wield_slowdown = 0.15
 	wield_delay = 0.3 SECONDS //OP? maybe
@@ -488,6 +487,8 @@ EMPTY_GUN_HELPER(shotgun/doublebarrel/presawn)
 	item_state = "dshotgun_srm"
 	unique_reskin = null
 
+EMPTY_GUN_HELPER(shotgun/doublebarrel/roumain)
+
 /obj/item/gun/ballistic/shotgun/doublebarrel/roumain/sawoff(forced = FALSE)
 	. = ..()
 	if(.)
@@ -511,9 +512,9 @@ EMPTY_GUN_HELPER(shotgun/doublebarrel/presawn)
 	gun_firemodes = list(FIREMODE_FULLAUTO)
 	default_firemode = FIREMODE_FULLAUTO
 
-	default_ammo_type = /obj/item/ammo_box/magazine/internal/shot/lethal
+	default_ammo_type = /obj/item/ammo_box/magazine/internal/shot/brimstone
 	allowed_ammo_types = list(
-		/obj/item/ammo_box/magazine/internal/shot/lethal,
+		/obj/item/ammo_box/magazine/internal/shot/brimstone,
 	)
 	manufacturer = MANUFACTURER_HUNTERSPRIDE
 	fire_delay = 0.05 SECONDS //slamfire
@@ -615,10 +616,12 @@ EMPTY_GUN_HELPER(shotgun/hellfire)
 	desc = "A lightweight lever-action shotgun with a 5 round ammunition capacity. The lever action allows it to be cycled quickly and acurrately. In theory, you could ever operate it one-handed. Chambered in 12g."
 	sawn_desc = "A lever action shotgun that's been sawed down for portability. The recoil makes it mostly useless outside of point-blank range, but it hits hard for its size and, more importantly, can be flipped around stylishly."
 	default_ammo_type = /obj/item/ammo_box/magazine/internal/shot/winchester/conflagration
+	recoil = 1
+	recoil_unwielded = 4
 	allowed_ammo_types = list(
 		/obj/item/ammo_box/magazine/internal/shot/winchester/conflagration,
 	)
-
+	door_breaching_weapon = TRUE
 	slot_offsets = list(
 		ATTACHMENT_SLOT_MUZZLE = list(
 			"x" = 47,
@@ -647,11 +650,11 @@ EMPTY_GUN_HELPER(shotgun/hellfire)
 		wield_slowdown = wield_slowdown-0.1
 		wield_delay = 0.2 SECONDS
 
-		spread = 4
+		spread = 8
 		spread_unwielded = 12
 
-		recoil = 0
-		recoil_unwielded = 3
+		recoil = 2
+		recoil_unwielded = 5
 
 EMPTY_GUN_HELPER(shotgun/flamingarrow/conflagration)
 
@@ -766,6 +769,8 @@ EMPTY_GUN_HELPER(shotgun/flamingarrow/conflagration)
 	icon_state = "illestren_factory"
 	item_state = "illestren_factory"
 
+EMPTY_GUN_HELPER(rifle/illestren/factory)
+
 /obj/item/gun/ballistic/rifle/illestren/sawoff(forced = FALSE)
 	. = ..()
 	if(.)
@@ -835,6 +840,8 @@ EMPTY_GUN_HELPER(shotgun/flamingarrow/conflagration)
 		)
 	)
 
+	door_breaching_weapon = FALSE
+
 EMPTY_GUN_HELPER(shotgun/flamingarrow)
 
 /obj/item/gun/ballistic/shotgun/flamingarrow/update_icon_state()
@@ -882,6 +889,15 @@ EMPTY_GUN_HELPER(shotgun/flamingarrow)
 		recoil = 0
 		recoil_unwielded = 3
 
+//pre sawn off flaming arrow
+/obj/item/gun/ballistic/shotgun/flamingarrow/presawn/Initialize(mapload, spawn_empty)
+	. = ..()
+	sawoff(TRUE)
+/obj/item/gun/ballistic/shotgun/flamingarrow/presawn
+	default_ammo_type = /obj/item/ammo_box/magazine/internal/shot/winchester/presawn
+
+EMPTY_GUN_HELPER(shotgun/flamingarrow/presawn)
+
 /obj/item/gun/ballistic/shotgun/flamingarrow/factory
 	desc = "A sturdy and lightweight lever-action rifle with hand-stamped Hunter's Pride marks on the receiver. This example has been kept in excellent shape and may as well be fresh out of the workshop. Chambered in .38."
 	icon_state = "flamingarrow_factory"
@@ -894,12 +910,23 @@ EMPTY_GUN_HELPER(shotgun/flamingarrow)
 		item_state = "flamingarrow_factory_sawn"
 		mob_overlay_state = item_state
 
+//pre sawn off Factoryyy flaming arrow
+/obj/item/gun/ballistic/shotgun/flamingarrow/factory/presawn/Initialize(mapload, spawn_empty)
+	. = ..()
+	sawoff(TRUE)
+/obj/item/gun/ballistic/shotgun/flamingarrow/factory/presawn
+	default_ammo_type = /obj/item/ammo_box/magazine/internal/shot/winchester/presawn
+
+EMPTY_GUN_HELPER(shotgun/flamingarrow/factory/presawn)
+
 /obj/item/gun/ballistic/shotgun/flamingarrow/bolt
 	name = "HP Flaming Bolt"
 	desc = "A sturdy, excellently-made lever-action rifle. This one appears to be a genuine antique, kept in incredibly good condition despite its advanced age. Chambered in .38."
 	base_icon_state = "flamingbolt"
 	icon_state = "flamingbolt"
 	item_state = "flamingbolt"
+
+EMPTY_GUN_HELPER(shotgun/flamingarrow/bolt)
 
 /obj/item/gun/ballistic/shotgun/flamingarrow/bolt/sawoff(forced = FALSE)
 	. = ..()
@@ -965,6 +992,58 @@ EMPTY_GUN_HELPER(shotgun/flamingarrow)
 	if(.)
 		item_state = "absolution_factory_sawn"
 		mob_overlay_state = item_state
+
+/obj/item/gun/ballistic/shotgun/flamingarrow/pyre
+	name = "HP Pyre"
+	base_icon_state = "pyre"
+	icon_state = "pyre"
+	item_state = "pyre"
+	fire_sound = 'sound/weapons/gun/revolver/shot_hunting.ogg'
+	desc = "A powerful lever-action rifle with hand-stamped Hunter's Pride marks on the receiver and an 5 round ammunition capacity. Bulky and unwieldy but devastatingly powerful. Chambered in .45-70."
+	default_ammo_type = /obj/item/ammo_box/magazine/internal/shot/winchester/pyre
+	allowed_ammo_types = list(
+		/obj/item/ammo_box/magazine/internal/shot/winchester/pyre,
+	)
+	fire_delay = 0.8 SECONDS
+	wield_slowdown = HEAVY_RIFLE_SLOWDOWN
+	wield_delay = 1 SECONDS
+	spread_unwielded = 15
+	spread = 0
+	recoil = 1.5
+	recoil_unwielded = 4
+	gunslinger_recoil_bonus = 0
+
+	slot_available = list(
+		ATTACHMENT_SLOT_MUZZLE = 1,
+		ATTACHMENT_SLOT_SCOPE = 1
+	)
+
+
+	valid_attachments = list(
+		/obj/item/attachment/silencer,
+		/obj/item/attachment/bayonet
+		)
+	unique_attachments = list(/obj/item/attachment/scope)
+	slot_offsets = list(
+		ATTACHMENT_SLOT_MUZZLE = list(
+			"x" = 48,
+			"y" = 19,
+		),
+		ATTACHMENT_SLOT_SCOPE = list(
+			"x" = 25,
+			"y" = 21,
+		)
+	)
+
+	can_be_sawn_off = FALSE
+
+EMPTY_GUN_HELPER(shotgun/flamingarrow/pyre)
+
+/obj/item/gun/ballistic/shotgun/flamingarrow/pyre/factory
+	base_icon_state = "pyre_factory"
+	icon_state = "pyre_factory"
+	item_state = "pyre_factory"
+	desc = "A powerful lever-action rifle with hand-stamped Hunter's Pride marks on the receiver and an 5 round ammunition capacity, in pristine wood furniture lined with brass. Bulky and unwieldy but devastatingly powerful. Chambered in .45-70."
 
 //Break-Action Rifle
 /obj/item/gun/ballistic/shotgun/doublebarrel/beacon
@@ -1058,7 +1137,7 @@ EMPTY_GUN_HELPER(shotgun/doublebarrel/beacon)
 	sawn_desc= "A break-action pistol chambered in .45-70. A bit difficult to aim."
 	sawn_off = TRUE
 	w_class = WEIGHT_CLASS_NORMAL
-	slot_flags = ITEM_SLOT_BELT
+	slot_flags = ITEM_SLOT_BACK | ITEM_SLOT_SUITSTORE
 
 	weapon_weight = WEAPON_MEDIUM
 
@@ -1153,8 +1232,10 @@ EMPTY_GUN_HELPER(shotgun/doublebarrel/beacon)
 	zoom_amt = 10 //Long range, enough to see in front of you, but no tiles behind you.
 	zoom_out_amt = 5
 
-	recoil = 1
-	recoil_unwielded = 8
+	wield_slowdown = SNIPER_SLOWDOWN
+
+	recoil = 3
+	recoil_unwielded = 10
 
 	manufacturer = MANUFACTURER_HUNTERSPRIDE
 
@@ -1171,7 +1252,7 @@ EMPTY_GUN_HELPER(shotgun/doublebarrel/beacon)
 
 /obj/item/gun/ballistic/automatic/assault/invictus
 	name = "HP Invictus"
-	desc = "An unwieldy automatic rifle fielded by the Saint-Roumain Militia, commonly sold to police forces and private buyers. Chambered in .308."
+	desc = "An unwieldy automatic rifle fielded by the Saint-Roumain Militia, commonly sold to police forces and private buyers. This one has a smooth wood finish and is in pristine condition. Chambered in .308."
 	icon = 'icons/obj/guns/manufacturer/hunterspride/48x32.dmi'
 	lefthand_file = 'icons/obj/guns/manufacturer/hunterspride/lefthand.dmi'
 	righthand_file = 'icons/obj/guns/manufacturer/hunterspride/righthand.dmi'
@@ -1190,7 +1271,7 @@ EMPTY_GUN_HELPER(shotgun/doublebarrel/beacon)
 
 	weapon_weight = WEAPON_MEDIUM
 	w_class = WEIGHT_CLASS_BULKY
-	slot_flags = ITEM_SLOT_BACK
+	slot_flags = ITEM_SLOT_BACK | ITEM_SLOT_SUITSTORE
 
 	fire_delay = 0.25 SECONDS
 
@@ -1199,6 +1280,8 @@ EMPTY_GUN_HELPER(shotgun/doublebarrel/beacon)
 
 	recoil = 1
 	recoil_unwielded = 4
+
+	wear_rate = 0.6
 
 	fire_sound = 'sound/weapons/gun/hmg/hmg.ogg'
 
@@ -1221,6 +1304,13 @@ EMPTY_GUN_HELPER(shotgun/doublebarrel/beacon)
 
 EMPTY_GUN_HELPER(automatic/assault/invictus)
 NO_MAG_GUN_HELPER(automatic/assault/invictus)
+
+/obj/item/gun/ballistic/automatic/assault/invictus/old
+	desc = "An unwieldy automatic rifle fielded by the Saint-Roumain Militia, commonly sold to police forces and private buyers. Chambered in .308."
+	icon_state = "invictus_old"
+	item_state = "invictus_old"
+
+	wear_rate = 1
 
 /obj/item/ammo_box/magazine/invictus_308_mag
 	name = "Invictus magazine (.308)"

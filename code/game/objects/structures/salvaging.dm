@@ -373,6 +373,49 @@
 			audible_message(span_danger("A bundle of vines unfurls from inside the [src]!"))
 			new /mob/living/simple_animal/hostile/venus_human_trap(get_turf(src))
 
+/obj/structure/salvageable/kitchenvend
+	name = "broken-down kitchen vendor"
+	desc = "A ruined kitchen vending machine. Some of its contents might still be intact."
+	icon_state = "dinnerware-broken"
+	icon = 'icons/obj/vending.dmi'
+	salvageable_parts = list(
+		/obj/item/kitchen/rollingpin = 80,
+		/obj/item/reagent_containers/glass/bowl = 80,
+		/obj/item/kitchen/fork = 40,
+		/obj/item/shard = 80,
+		/obj/item/reagent_containers/food/drinks/drinkingglass = 80,
+		/obj/item/plate/small = 80,
+		/obj/item/plate/large = 40,
+		/obj/item/clothing/suit/apron/chef = 40,
+		/obj/item/stack/ore/salvage/scrapmetal/five = 80,
+		/obj/item/stack/cable_coil/cut = 80,
+		/obj/item/book/granter/crafting_recipe/cooking_sweets_101 = 20,
+		/obj/item/melee/knife/kitchen = 10,
+	)
+
+/obj/structure/salvageable/turret
+	name = "destroyed turret"
+	desc = "A long-deserviced automated twin-barrel ballistic turret. Layers of dust coat its cracked lens. Some of its parts might still be useful."
+	icon_state = "syndie_broken"
+	icon = 'icons/obj/turrets.dmi'
+	salvageable_parts = list(
+		/obj/item/shard = 80,
+		/obj/item/ammo_casing/spent/rifle_steel = 80,
+		/obj/item/ammo_casing/spent/rifle_steel = 80,
+		/obj/item/stack/cable_coil/cut = 80,
+		/obj/item/stack/cable_coil/cut = 80,
+		/obj/item/stack/ore/salvage/scrapgold/five = 60,
+		/obj/item/stack/ore/salvage/scrapmetal/five = 60,
+		/obj/item/stack/ore/salvage/scrapplasma = 60,
+		/obj/item/stack/ore/salvage/scrapuranium = 60,
+		/obj/item/circuitboard/machine/turret = 55,
+		/obj/effect/spawner/random/salvage/part/scanning = 50,
+		/obj/effect/spawner/random/salvage/part/scanning = 50,
+		/obj/item/weaponcrafting/receiver = 40,
+		/obj/effect/spawner/random/salvage_laser = 40,
+		/obj/item/storage/toolbox/ammo = 40,
+	)
+
 //scrap item, mostly for fluff
 /obj/item/stack/ore/salvage
 	name = "salvage"

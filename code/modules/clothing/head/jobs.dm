@@ -67,7 +67,7 @@
 		..()
 		if(loc == user)
 			if(candy_cooldown < world.time)
-				var/obj/item/reagent_containers/food/snacks/candy_corn/CC = new /obj/item/reagent_containers/food/snacks/candy_corn(src)
+				var/obj/item/food/candy_corn/CC = new /obj/item/food/candy_corn(src)
 				user.put_in_hands(CC)
 				to_chat(user, span_notice("You slip a candy corn from your hat."))
 				candy_cooldown = world.time+1200
@@ -102,12 +102,6 @@
 /obj/item/clothing/head/HoS/syndicate
 	name = "syndicate cap"
 	desc = "A black cap fit for a high ranking syndicate officer."
-
-/obj/item/clothing/head/HoS/cybersun
-	name = "cybersun hat"
-	desc = "A crimson-red hat fit for a high ranking cybersun officer."
-	icon_state = "cybersunhat"
-	item_state = "cybersunhat"
 
 /obj/item/clothing/head/HoS/beret/syndicate
 	name = "syndicate beret"

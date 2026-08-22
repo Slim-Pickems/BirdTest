@@ -50,7 +50,7 @@
 
 	footstep_type = FOOTSTEP_MOB_HEAVY
 
-/mob/living/simple_animal/hostile/asteroid/goliath/Life()
+/mob/living/simple_animal/hostile/asteroid/goliath/Life(seconds_per_tick = SSMOBS_DT, times_fired)
 	. = ..()
 	handle_preattack()
 
@@ -260,7 +260,7 @@
 	var/turf/last_location
 	var/tentacle_recheck_cooldown = 70
 
-/mob/living/simple_animal/hostile/asteroid/goliath/beast/ancient/Life()
+/mob/living/simple_animal/hostile/asteroid/goliath/beast/ancient/Life(seconds_per_tick = SSMOBS_DT, times_fired)
 	. = ..()
 	if(!.) // dead
 		return
@@ -275,7 +275,7 @@
 				LAZYADD(cached_tentacle_turfs, T)
 		for(var/t in cached_tentacle_turfs)
 			if(isopenturf(t))
-				if(prob(10))
+				if(SPT_PROB(5, seconds_per_tick))
 					new tentacle_type(t, src)
 			else
 				cached_tentacle_turfs -= t
@@ -339,16 +339,27 @@
 		timerid = addtimer(CALLBACK(src, PROC_REF(retract)), 10, TIMER_STOPPABLE)
 
 /obj/effect/temp_visual/goliath_tentacle/proc/on_hit(mob/living/target)
-	target.apply_damage(rand(20,30), BRUTE, pick(BODY_ZONE_L_LEG, BODY_ZONE_R_LEG))
+	var/obj/item/bodypart/affecting
+	if(ishuman(target))
+		if(prob(50))
+			affecting = target.get_bodypart(BODY_ZONE_R_LEG)
+		else
+			affecting = target.get_bodypart(BODY_ZONE_L_LEG)
+		if(!affecting) //(!target.get_bodypart(BODY_ZONE_R_LEG) && !target.get_bodypart(BODY_ZONE_L_LEG))
+			affecting = target.get_bodypart(BODY_ZONE_CHEST)
+		var/armor_block
+		armor_block = target.run_armor_check(affecting, MELEE)
+		target.apply_damage(rand(20,25), BRUTE, affecting, armor_block, FALSE, wound_bonus = CANT_WOUND)
+	else
+		target.apply_damage(rand(20,25), BRUTE, wound_bonus = CANT_WOUND)
 	if(iscarbon(target))
 		var/obj/item/restraints/legcuffs/beartrap/goliath/B = new /obj/item/restraints/legcuffs/beartrap/goliath(get_turf(target))
 		B.on_entered(src, target)
-
 /obj/effect/temp_visual/goliath_tentacle/proc/retract()
 	icon_state = "marker"
 	flick(retract,src)
 	deltimer(timerid)
-	timerid = QDEL_IN(src, 7)
+	timerid = QDEL_IN_STOPPABLE(src, 7)
 
 /obj/item/saddle
 	name = "saddle"
@@ -427,6 +438,7 @@
 	damage = 25
 	damage_type = BRUTE
 	speed = 3
+	range = 14
 
 /obj/projectile/goliath/on_hit(atom/target, blocked)
 	. = ..()
@@ -504,7 +516,7 @@
 	armor = list("melee" = 30, "bullet" = 65, "laser" = 55, "energy" = 30, "bomb" = 60, "bio" = 30, "rad" = 50, "fire" = 30, "acid" = 50)
 	move_to_delay = 3 SECONDS
 	speed = 3
-	//mob_trophy = /obj/item/mob_trophy/elder_tentacle
+	mob_trophy = /obj/item/mob_trophy/elder_tentacle
 	pre_attack_icon = "ws_ancient_goliath_preattack"
 	throw_message = "does nothing to the rocky hide of the"
 	guaranteed_butcher_results = list()

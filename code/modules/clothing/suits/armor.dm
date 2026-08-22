@@ -11,7 +11,7 @@
 	equip_delay_other = 40
 	max_integrity = 250
 	resistance_flags = NONE
-	armor = list("melee" = 35, "bullet" = 35, "laser" = 35, "energy" = 40, "bomb" = 25, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 50)
+	armor = list("melee" = 35, "bullet" = 35, "laser" = 35, "energy" = 40, "bomb" = 25, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 50, "wound" = 10)
 	greyscale_colors = list(list(18, 19), list(13, 18), list(20, 15))
 	greyscale_icon_state = "armor"
 
@@ -22,7 +22,7 @@
 	equip_delay_self = EQUIP_DELAY_SUIT
 	equip_delay_other = EQUIP_DELAY_SUIT * 1.5
 	strip_delay = EQUIP_DELAY_SUIT * 1.5
-	equip_self_flags = null
+	equip_self_flags = EQUIP_ALLOW_MOVEMENT | EQUIP_SLOWDOWN
 
 /obj/item/clothing/suit/armor/Initialize()
 	. = ..()
@@ -43,24 +43,26 @@
 	item_state = "armoralt"
 	//supports_variations = KEPORI_VARIATION
 
-/obj/item/clothing/suit/armor/vest/trauma
-	name = "cybersun trauma team armor vest"
-	icon_state = "traumavest"
-	desc = "A set of stamped plasteel armor plates decorated with a medical cross and colors associated with the medical division of Cybersun."
-
 /obj/item/clothing/suit/armor/vest/marine
 	name = "tactical armor vest"
 	desc = "A heavy set of the finest mass-produced stamped plasteel armor plates money can buy."
 	icon_state = "marine_light"
 	item_state = "armor"
 	body_parts_covered = CHEST|GROIN
-	armor = list("melee" = 20, "bullet" = 45, "laser" = 45, "energy" = 25, "bomb" = 30, "bio" = 65, "fire" = 40, "acid" = 50)
+	armor = list("melee" = 20, "bullet" = 45, "laser" = 45, "energy" = 25, "bomb" = 30, "bio" = 65, "fire" = 40, "acid" = 50, "wound" = 20)
 	cold_protection = CHEST|GROIN
 	min_cold_protection_temperature = ARMOR_MIN_TEMP_PROTECT
 	heat_protection = CHEST|GROIN
 	resistance_flags = FIRE_PROOF | ACID_PROOF
 	supports_variations = VOX_VARIATION | DIGITIGRADE_VARIATION_NO_NEW_ICON
 	slowdown = 0 //one day...
+	obj_flags = INFINITE_RESKIN
+	unique_reskin = list(
+		"None" = "marine_light",
+		"Desert" = "marine_light_desert",
+		"Woodland" = "marine_light_woodland",
+		"Snow" = "marine_light_snow",
+		)
 
 /obj/item/clothing/suit/armor/vest/marine/medium
 	name = "medium tactical armor vest"
@@ -68,8 +70,14 @@
 	body_parts_covered = CHEST|GROIN|LEGS|ARMS
 	cold_protection = CHEST|GROIN|LEGS|ARMS
 	heat_protection = CHEST|GROIN|LEGS|ARMS
-	armor = list("melee" = 35, "bullet" = 50, "laser" = 45, "energy" = 25, "bomb" = 30, "bio" = 75, "fire" = 40, "acid" = 50)
+	armor = list("melee" = 35, "bullet" = 50, "laser" = 45, "energy" = 25, "bomb" = 30, "bio" = 75, "fire" = 40, "acid" = 50, "wound" = 30)
 	slowdown = 0.4
+	unique_reskin = list(
+		"None" = "marine_medium",
+		"Desert" = "marine_medium_desert",
+		"Woodland" = "marine_medium_woodland",
+		"Snow" = "marine_medium_snow",
+		)
 
 /obj/item/clothing/suit/armor/vest/marine/heavy
 	name = "heavy tactical armor vest"
@@ -77,8 +85,14 @@
 	body_parts_covered = CHEST|GROIN|LEGS|ARMS
 	cold_protection = CHEST|GROIN|LEGS|ARMS
 	heat_protection = CHEST|GROIN|LEGS|ARMS
-	armor = list("melee" = 60, "bullet" = 60, "laser" = 55, "energy" = 25, "bomb" = 50, "bio" = 75, "fire" = 40, "acid" = 50)
+	armor = list("melee" = 60, "bullet" = 60, "laser" = 55, "energy" = 25, "bomb" = 50, "bio" = 75, "fire" = 40, "acid" = 50, "wound" = 40)
 	slowdown = 0.8
+	unique_reskin = list(
+		"None" = "marine_heavy",
+		"Desert" = "marine_heavy_desert",
+		"Woodland" = "marine_heavy_woodland",
+		"Snow" = "marine_heavy_snow",
+		)
 
 /obj/item/clothing/suit/armor/vest/old
 	name = "degrading armor vest"
@@ -99,13 +113,14 @@
 	item_state = "duster_sec"
 	cold_protection = CHEST|GROIN|LEGS|ARMS
 	heat_protection = CHEST|GROIN|LEGS|ARMS
+	supports_variations = DIGITIGRADE_VARIATION | VOX_VARIATION
 
 /obj/item/clothing/suit/armor/hos
 	name = "armored greatcoat"
 	desc = "A greatcoat enhanced with a special alloy for some extra protection and style for those with a commanding presence."
 	icon_state = "armor_hos"
 	item_state = "greatcoat"
-	armor = list("melee" = 35, "bullet" = 35, "laser" = 35, "energy" = 40, "bomb" = 25, "bio" = 0, "rad" = 0, "fire" = 70, "acid" = 90)
+	armor = list("melee" = 35, "bullet" = 35, "laser" = 35, "energy" = 40, "bomb" = 25, "bio" = 0, "rad" = 0, "fire" = 70, "acid" = 90, "wound" = 20)
 	cold_protection = CHEST|GROIN|LEGS|ARMS
 	heat_protection = CHEST|GROIN|LEGS|ARMS
 	strip_delay = 80
@@ -133,14 +148,14 @@
 	desc = "A white jacket with silver rank pips and body armor strapped on top."
 	icon_state = "armor_warden_jacket"
 
-/obj/item/clothing/suit/armor/vest/security/warden/alt/nt
+/obj/item/clothing/suit/armor/vest/security/warden/alt/warra
 	name = "warden's red armored jacket"
 	desc = "A red jacket with silver rank pips and body armor strapped on top."
 	icon_state = "armor_rwarden_jacket"
 
 /obj/item/clothing/suit/armor/vest/leather
 	name = "security overcoat"
-	desc = "Lightly armored leather overcoat meant as casual wear for high-ranking officers. Bears the crest of Nanotrasen Security."
+	desc = "Lightly armored leather overcoat meant as casual wear for high-ranking officers. Bears the crest of Vigilitas Security."
 	icon_state = "armor_leathercoat-sec"
 	item_state = "hostrench"
 	cold_protection = CHEST|GROIN|LEGS|ARMS
@@ -152,7 +167,7 @@
 	desc = "A fireproof armored chestpiece reinforced with ceramic plates and plasteel pauldrons to provide additional protection whilst still offering maximum mobility and flexibility. Issued only to NT's finest, although it does chafe your nipples."
 	icon_state = "carapace_nt"
 	item_state = "armor"
-	armor = list("melee" = 50, "bullet" = 40, "laser" = 50, "energy" = 50, "bomb" = 25, "bio" = 0, "rad" = 0, "fire" = 100, "acid" = 90)
+	armor = list("melee" = 50, "bullet" = 40, "laser" = 50, "energy" = 50, "bomb" = 25, "bio" = 0, "rad" = 0, "fire" = 100, "acid" = 90, "wound" = 20)
 	dog_fashion = null
 	resistance_flags = FIRE_PROOF
 
@@ -160,11 +175,6 @@
 	name = "Syndicate captain's vest"
 	desc = "A sinister looking vest of advanced armor worn over a black and red fireproof jacket. The gold collar and shoulders denote that this belongs to a high ranking Syndicate officer."
 	icon_state = "carapace_syndie"
-
-/obj/item/clothing/suit/armor/vest/capcarapace/cybersun
-	name = "Cybersun captain's haori"
-	desc = "An extraordinarily fashionable haori, utilized by Cybersun captains. Weaved with armored fabric to protect the user from gunshots."
-	icon_state = "carapace_cybersun"
 
 /obj/item/clothing/suit/armor/vest/capcarapace/captunic
 	name = "captain's parade coat"
@@ -179,6 +189,21 @@
 	item_state = "duster_captain"
 	supports_variations = VOX_VARIATION
 
+/obj/item/clothing/suit/armor/captaincoat
+	name = "captain's fur coat"
+	desc = "A long, stiff commanding coat, meant for frigid conditions."
+	icon_state = "captain_coat"
+	body_parts_covered = CHEST|GROIN
+	cold_protection = CHEST|GROIN|ARMS
+	heat_protection = CHEST|GROIN|ARMS
+	icon_state = "captain_coat"
+	item_state = "captain_coat"
+	blood_overlay_type = "coat"
+	armor = list("melee" = 35, "bullet" = 35, "laser" = 35, "energy" = 40, "bomb" = 25, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 50)
+	icon = 'icons/obj/clothing/suits/armor.dmi'
+	mob_overlay_icon = 'icons/mob/clothing/suits/armor.dmi'
+	supports_variations = DIGITIGRADE_VARIATION
+
 /obj/item/clothing/suit/armor/riot
 	name = "riot suit"
 	desc = "A suit of semi-flexible polycarbonate body armor with heavy padding to protect against melee attacks. Helps the wearer resist shoving in close quarters."
@@ -187,7 +212,7 @@
 	body_parts_covered = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
 	cold_protection = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
 	heat_protection = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
-	armor = list("melee" = 50, "bullet" = 10, "laser" = 10, "energy" = 10, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 80, "acid" = 80)
+	armor = list("melee" = 50, "bullet" = 10, "laser" = 10, "energy" = 10, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 80, "acid" = 80, "wound" = 30)
 	clothing_flags = BLOCKS_SHOVE_KNOCKDOWN
 	strip_delay = 80
 	equip_delay_other = 60
@@ -198,14 +223,14 @@
 	icon_state = "armor_bone"
 	item_state = "bonearmor"
 	blood_overlay_type = "armor"
-	armor = list("melee" = 35, "bullet" = 25, "laser" = 25, "energy" = 35, "bomb" = 25, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 50)
+	armor = list("melee" = 35, "bullet" = 25, "laser" = 25, "energy" = 35, "bomb" = 25, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 50, "wound" = 10)
 	body_parts_covered = CHEST|GROIN|LEGS|FEET|ARMS
 
 /obj/item/clothing/suit/armor/vest/bulletproof
 	name = "bulletproof armor"
 	desc = "A Type III heavy bulletproof vest that excels in protecting the wearer against traditional projectile weaponry and explosives to a minor extent."
 	icon_state = "bulletproof"
-	armor = list("melee" = 15, "bullet" = 60, "laser" = 10, "energy" = 10, "bomb" = 40, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 50)
+	armor = list("melee" = 15, "bullet" = 60, "laser" = 10, "energy" = 10, "bomb" = 40, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 50, "wound" = 20)
 	strip_delay = 70
 	equip_delay_other = 50
 
@@ -217,9 +242,9 @@
 	blood_overlay_type = "armor"
 	cold_protection = CHEST|GROIN|ARMS
 	heat_protection = CHEST|GROIN|ARMS
-	armor = list("melee" = 10, "bullet" = 10, "laser" = 60, "energy" = 60, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 100, "acid" = 100)
+	armor = list("melee" = 10, "bullet" = 10, "laser" = 65, "energy" = 65, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 100, "acid" = 100, "wound" = 10)
 	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | ACID_PROOF
-	var/hit_reflect_chance = 50
+	var/hit_reflect_chance = 5
 
 /obj/item/clothing/suit/armor/laserproof/IsReflect(def_zone)
 	if(!(def_zone in list(BODY_ZONE_CHEST, BODY_ZONE_PRECISE_GROIN, BODY_ZONE_L_ARM, BODY_ZONE_R_ARM))) //If not shot where ablative is covering you, you don't get the reflection bonus!
@@ -243,7 +268,7 @@
 	desc = "This vest is made of of highly flexible materials that absorb impacts with ease."
 	icon_state = "armor_infiltrator"
 	item_state = "infiltrator"
-	armor = list("melee" = 40, "bullet" = 40, "laser" = 30, "energy" = 40, "bomb" = 70, "bio" = 0, "rad" = 0, "fire" = 100, "acid" = 100)
+	armor = list("melee" = 40, "bullet" = 40, "laser" = 30, "energy" = 40, "bomb" = 70, "bio" = 0, "rad" = 0, "fire" = 100, "acid" = 100, "wound" = 20)
 	resistance_flags = FIRE_PROOF | ACID_PROOF
 	strip_delay = 80
 
@@ -320,7 +345,7 @@
 	equip_delay_other = 40
 	max_integrity = 200
 	resistance_flags = FLAMMABLE
-	armor = list("melee" = 20, "bullet" = 10, "laser" = 30, "energy" = 40, "bomb" = 15, "bio" = 0, "rad" = 0, "fire" = 40, "acid" = 50)
+	armor = list("melee" = 20, "bullet" = 10, "laser" = 30, "energy" = 40, "bomb" = 15, "bio" = 0, "rad" = 0, "fire" = 40, "acid" = 50, "wound" = 10)
 
 /obj/item/clothing/suit/armor/vest/hop
 	name = "head of personnel's parade jacket"
@@ -342,7 +367,7 @@
 	blood_overlay_type = "coat"
 	body_parts_covered = CHEST|ARMS
 	allowed = list(/obj/item/tank/internals, /obj/item/melee/curator_whip)
-	armor = list("melee" = 25, "bullet" = 10, "laser" = 25, "energy" = 35, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 0, "acid" = 45)
+	armor = list("melee" = 25, "bullet" = 10, "laser" = 25, "energy" = 35, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 0, "acid" = 45, "wound" = 5)
 	cold_protection = CHEST|ARMS
 	heat_protection = CHEST|ARMS
 

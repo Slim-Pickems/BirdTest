@@ -49,6 +49,8 @@
 	/// A copy of the last paper object that was shown to this camera.
 	var/obj/item/paper/last_shown_paper
 
+MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/camera, 16)
+
 /obj/machinery/camera/preset/toxins //Bomb test site in space
 	name = "Hardened Bomb-Test Camera"
 	desc = "A specially-reinforced camera with a long lasting battery, used to monitor the bomb testing site. An external light is attached to the top."
@@ -100,7 +102,7 @@
 /obj/machinery/camera/proc/create_prox_monitor()
 	if(!proximity_monitor)
 		proximity_monitor = new(src, 1)
-		RegisterSignal(proximity_monitor, COMSIG_PARENT_QDELETING, PROC_REF(proximity_deleted))
+		RegisterSignal(proximity_monitor, COMSIG_QDELETING, PROC_REF(proximity_deleted))
 
 /obj/machinery/camera/proc/proximity_deleted()
 	SIGNAL_HANDLER
@@ -249,7 +251,7 @@
 	if(!panel_open)
 		return
 	toggle_cam(user, 1)
-	obj_integrity = max_integrity //this is a pretty simplistic way to heal the camera, but there's no reason for this to be complex.
+	atom_integrity = max_integrity //this is a pretty simplistic way to heal the camera, but there's no reason for this to be complex.
 	set_machine_stat(machine_stat & ~BROKEN)
 	I.play_tool_sound(src)
 	return TRUE
@@ -399,12 +401,12 @@
 	return ..()
 
 
-/obj/machinery/camera/run_obj_armor(damage_amount, damage_type, damage_flag = 0, attack_dir)
+/obj/machinery/camera/run_atom_armor(damage_amount, damage_type, damage_flag = 0, attack_dir)
 	if(machine_stat & BROKEN)
 		return damage_amount
 	. = ..()
 
-/obj/machinery/camera/obj_break(damage_flag)
+/obj/machinery/camera/atom_break(damage_flag)
 	if(!status)
 		return
 	. = ..()
@@ -423,7 +425,7 @@
 			assembly = null
 		else
 			var/obj/item/I = new /obj/item/wallframe/camera (loc)
-			I.obj_integrity = I.max_integrity * 0.5
+			I.atom_integrity = I.max_integrity * 0.5
 			new /obj/item/stack/cable_coil(loc, 2)
 	qdel(src)
 

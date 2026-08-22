@@ -77,23 +77,13 @@
 	category = list("Weapons")
 	departmental_flags = DEPARTMENTAL_FLAG_SECURITY | DEPARTMENTAL_FLAG_SCIENCE//this weapon is an active threat to the user, I think we can safely refile it under "experimental"
 
-/datum/design/nuclear_gun
-	name = "Advanced Energy Gun"
-	desc = "An energy gun with an experimental miniaturized reactor."
-	id = "nuclear_gun"
-	build_type = PROTOLATHE
-	materials = list(/datum/material/iron = 10000, /datum/material/glass = 2000, /datum/material/uranium = 3000, /datum/material/titanium = 1000)
-	build_path = /obj/item/gun/energy/e_gun/nuclear
-	category = list("Weapons")
-	departmental_flags = DEPARTMENTAL_FLAG_SECURITY
-
 /datum/design/tele_shield
 	name = "Telescopic Riot Shield"
 	desc = "An advanced riot shield made of lightweight materials that collapses for easy storage."
 	id = "tele_shield"
 	build_type = PROTOLATHE
 	materials = list(/datum/material/iron = 4000, /datum/material/glass = 4000, /datum/material/silver = 300, /datum/material/titanium = 200)
-	build_path = /obj/item/shield/riot/tele
+	build_path = /obj/item/shield/tele
 	category = list("Weapons")
 
 /datum/design/beamrifle
@@ -239,8 +229,8 @@
 	departmental_flags = DEPARTMENTAL_FLAG_SECURITY
 
 /datum/design/commanderammo
-	name = "Commander magazine (9x18mm)"
-	desc = "A single stack magazine chambered in 9x18mm for Commander sidearms."
+	name = "Commander magazine (9mm)"
+	desc = "A single stack magazine chambered in 9mm for Commander sidearms."
 	id = "commanderammo"
 	build_type = PROTOLATHE
 	materials = list(/datum/material/iron = 15000)
@@ -249,8 +239,8 @@
 	departmental_flags = DEPARTMENTAL_FLAG_SECURITY
 
 /datum/design/ringneckammo
-	name = "Ringneck magazine (10x22mm)"
-	desc = "A single stack Ringneck magazine, designed to chamber 10x22mm and fit into Scarborough Arm's Ringneck series of sidearms."
+	name = "Ringneck magazine (10mm)"
+	desc = "A single stack Ringneck magazine, designed to chamber 10mm and fit into Scarborough Arm's Ringneck series of sidearms."
 	id = "ringneckammo"
 	build_type = PROTOLATHE
 	materials = list(/datum/material/iron = 15000)
@@ -297,7 +287,7 @@
 	departmental_flags = DEPARTMENTAL_FLAG_SECURITY
 
 /datum/design/c9mm
-	name = "Ammo Box (9x18mm)"
+	name = "Ammo Box (9mm)"
 	id = "c9mm"
 	build_type = PROTOLATHE
 	materials = list(/datum/material/iron = 17000)
@@ -306,7 +296,7 @@
 	departmental_flags = DEPARTMENTAL_FLAG_SECURITY
 
 /datum/design/c10mm
-	name = "Ammo Box (10x22mm)"
+	name = "Ammo Box (10mm)"
 	id = "c10mm"
 	build_type = PROTOLATHE
 	materials = list(/datum/material/iron = 17000)
@@ -343,8 +333,8 @@
 	departmental_flags = DEPARTMENTAL_FLAG_SECURITY
 
 /datum/design/rubbershot10mm
-	name = "Rubbershot 10x22mm ammo box"
-	desc = "A box full of less-than-lethal 10x22mm ammunition."
+	name = "Rubbershot 10mm ammo box"
+	desc = "A box full of less-than-lethal 10mm ammunition."
 	id = "rubbershot10mm"
 	build_type = PROTOLATHE
 	materials = list(/datum/material/iron = 15000)
@@ -373,7 +363,7 @@
 	departmental_flags = DEPARTMENTAL_FLAG_SECURITY
 
 /datum/design/ap9mm
-	name = "AP 9x18mm ammo box"
+	name = "AP 9mm ammo box"
 	desc = "A box full of armor piercing 9mm ammunition."
 	id = "ap9mm"
 	build_type = PROTOLATHE
@@ -383,8 +373,8 @@
 	departmental_flags = DEPARTMENTAL_FLAG_SECURITY
 
 /datum/design/ap10mm
-	name = "AP 10x22mm ammo box"
-	desc = "A box full of armor piercing 10x22mm ammunition."
+	name = "AP 10mm ammo box"
+	desc = "A box full of armor piercing 10mm ammunition."
 	id = "ap10mm"
 	build_type = PROTOLATHE
 	materials = list(/datum/material/iron = 17000, /datum/material/uranium = 1000)
@@ -413,8 +403,8 @@
 	departmental_flags = DEPARTMENTAL_FLAG_SECURITY
 
 /datum/design/hp9mm
-	name = "HP 9x18mm ammo box"
-	desc = "A box full of hollow point 9x18mm ammunition."
+	name = "HP 9mm ammo box"
+	desc = "A box full of hollow point 9mm ammunition."
 	id = "hp9mm"
 	build_type = PROTOLATHE
 	materials = list(/datum/material/iron = 17000, /datum/material/silver = 1000)
@@ -423,8 +413,8 @@
 	departmental_flags = DEPARTMENTAL_FLAG_SECURITY
 
 /datum/design/hp10mm
-	name = "HP 10x22mm ammo box"
-	desc = "A box full of hollow point 10x22mm ammunition."
+	name = "HP 10mm ammo box"
+	desc = "A box full of hollow point 10mm ammunition."
 	id = "hp10mm"
 	build_type = PROTOLATHE
 	materials = list(/datum/material/iron = 17000, /datum/material/silver = 1000)

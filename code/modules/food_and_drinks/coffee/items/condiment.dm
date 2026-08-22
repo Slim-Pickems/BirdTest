@@ -1,9 +1,3 @@
-/obj/item/reagent_containers/condiment/pack/creamer
-	name = "creamer pack"
-	originalname = "creamer"
-	volume = 5
-	list_reagents = list(/datum/reagent/consumable/cream = 5)
-
 /obj/item/reagent_containers/condiment/pack/sugar
 	name = "sugar pack"
 	originalname = "sugar"
@@ -11,19 +5,17 @@
 	list_reagents = list(/datum/reagent/consumable/sugar = 5)
 
 ///Technically condiment packs but they are non transparent
-/obj/item/reagent_containers/condiment/creamer
+/obj/item/reagent_containers/condiment/pack/creamer
 	name = "coffee creamer pack"
 	desc = "Better not to think about what they are making this from."
-	icon = 'icons/obj/item/coffee.dmi'
 	icon_state = "condi_creamer"
 	volume = 5
 	list_reagents = list(/datum/reagent/consumable/creamer = 5)
 	fill_icon_thresholds = null
 
-/obj/item/reagent_containers/condiment/chocolate
+/obj/item/reagent_containers/condiment/pack/chocolate
 	name = "chocolate sprinkle pack"
 	desc = "The amount of sugar that's already there wasn't enough for you?"
-	icon = 'icons/obj/item/coffee.dmi'
 	icon_state = "condi_chocolate"
 	list_reagents = list(/datum/reagent/consumable/chocolatepudding = 10)
 
@@ -36,6 +28,7 @@
 	name = "syrup bottle"
 	desc = "A bottle with a syrup pump to dispense the delicious substance directly into your coffee cup."
 	icon = 'icons/obj/item/coffee.dmi'
+	world_file = null
 	icon_state = "syrup"
 	fill_icon_state = "syrup"
 	fill_icon_thresholds = list(0, 20, 40, 60, 80, 100)
@@ -46,6 +39,7 @@
 	spillable = FALSE
 	///variable to tell if the bottle can be refilled
 	cap_on = TRUE
+	custom_materials = list(/datum/material/glass = 400)
 
 /obj/item/reagent_containers/glass/bottle/syrup_bottle/examine(mob/user)
 	. = ..()
@@ -80,7 +74,6 @@
 	return TRUE
 
 /obj/item/reagent_containers/glass/bottle/syrup_bottle/AltClick(mob/user)
-	cap_on = !cap_on
 	if(!cap_on)
 		icon_state = "syrup_open"
 		to_chat(user, span_notice("You remove the pump cap."))

@@ -5,9 +5,10 @@
 	anchored = TRUE
 	density = TRUE
 	var/state = GIRDER_NORMAL
-	var/girderpasschance = 20 // percentage chance that a projectile passes through the girder.
 	var/can_displace = TRUE //If the girder can be moved around by wrenching it
 	var/next_beep = 0 //Prevents spamming of the construction sound
+	pass_through = TRUE
+	pass_chance = 50
 	max_integrity = 200
 	flags_1 = RAD_PROTECT_CONTENTS_1 | RAD_NO_CONTAMINATE_1
 	rad_insulation = RAD_VERY_LIGHT_INSULATION
@@ -299,11 +300,6 @@
 			qdel(src)
 		return TRUE
 
-/obj/structure/girder/CanAllowThrough(atom/movable/mover, border_dir)
-	. = ..()
-	if((mover.pass_flags & PASSGRILLE) || istype(mover, /obj/projectile))
-		return prob(girderpasschance)
-
 /obj/structure/girder/CanAStarPass(obj/item/card/id/ID, to_dir, atom/movable/requester)
 	. = !density
 	if(istype(requester))
@@ -320,14 +316,12 @@
 	icon_state = "displaced"
 	anchored = FALSE
 	state = GIRDER_DISPLACED
-	girderpasschance = 25
 	max_integrity = 120
 
 /obj/structure/girder/reinforced
 	name = "reinforced girder"
 	icon_state = "reinforced"
 	state = GIRDER_REINF
-	girderpasschance = 0
 	max_integrity = 350
 
 /obj/structure/girder/reinforced/deconstruct(disassembled = TRUE)

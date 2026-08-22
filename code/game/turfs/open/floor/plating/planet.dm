@@ -23,8 +23,6 @@
 	. = ..()
 	if(has_grass)
 		return
-	if(ismob(user, /datum/species/pod))
-		. += "<span class='notice'>While this plot of land is now farmable and fertile, theres nothing growing on it. Perhaps you could add <i>grass?</i></span>"
 
 /turf/open/floor/plating/asteroid/dirt/Initialize(mapload, inherited_virtual_z)
 	. = ..()
@@ -60,7 +58,7 @@
 /turf/open/floor/plating/asteroid/dirt/grass
 	name = "grass"
 	desc = "A patch of grass."
-	icon_state = "grass0"
+	icon_state = "grass-255"
 	base_icon_state = "grass"
 	bullet_bounce_sound = null
 	smoothing_flags = SMOOTH_BITMASK
@@ -73,6 +71,8 @@
 	layer = GRASS_TURF_LAYER
 	icon = 'icons/turf/floors/grass.dmi'
 	smooth_icon = 'icons/turf/floors/grass.dmi'
+	MAP_SWITCH(pixel_x = 0, pixel_x = -19)
+	MAP_SWITCH(pixel_y = 0, pixel_y = -19)
 	planetary_atmos = TRUE
 	baseturfs = /turf/open/floor/plating/asteroid/dirt
 	floor_variance = 100
@@ -106,18 +106,8 @@
 	baseturfs = /turf/open/floor/plating/asteroid/basalt/lava_land_surface/basin
 	var/current_water = 0 //yeah
 
-/turf/open/floor/plating/asteroid/basalt/lava_land_surface/basin/examine(mob/user)
-	. = ..()
-	if(ismob(user, /datum/species/pod))
-		. += "<span class='notice'>It could hold water, maybe 50 units per meter could do the trick. Currently, it has <i>[current_water]</i> units.</span>"
-
 /turf/open/floor/plating/asteroid/whitesands/dried
 	var/current_water = 0 //yeah
-
-/turf/open/floor/plating/asteroid/whitesands/dried/examine(mob/user)
-	. = ..()
-	if(ismob(user, /datum/species/pod))
-		. += "<span class='notice'>It could hold water, maybe 50 units per meter could do the trick. Currently, it has <i>[current_water]</i> units.</span>"
 
 /turf/open/floor/plating/asteroid/sand/terraform
 	light_color = LIGHT_COLOR_TUNGSTEN
@@ -147,84 +137,9 @@
 		exposed_object.icon = 'icons/obj/flora/rocks.dmi'
 		exposed_object.visible_message("<span class='notice'>[src]cools down.</span>")
 
-/obj/structure/flora/rock/lava/examine(mob/user)
-	. = ..()
-	if(ismob(user, /datum/species/pod))
-		. += "<span class='notice'>If I pour some <i>water</i> onto it, maybe it can cool down?</span>"
-
-
-/obj/structure/flora/rock/pile/lava/examine(mob/user)
-	. = ..()
-	if(ismob(user, /datum/species/pod))
-		. += "<span class='notice'>If I pour some <i>water</i> onto it, maybe it can cool down?</span>"
-
-// Legacy grass/firt turfs, do not use
-
-/turf/open/floor/plating/dirt
-	gender = PLURAL
-	name = "dirt"
-	desc = "Upon closer examination, it's still dirt."
-	icon = 'icons/turf/planetary/jungle.dmi'
-	icon_state = "dirt"
-	planetary_atmos = TRUE
-	attachment_holes = FALSE
-	footstep = FOOTSTEP_MUD
-	barefootstep = FOOTSTEP_MUD
-	clawfootstep = FOOTSTEP_MUD
-	heavyfootstep = FOOTSTEP_GENERIC_HEAVY
-	tiled_dirt = FALSE
-	baseturfs = /turf/open/floor/plating/dirt
-
-/turf/open/floor/plating/dirt/dark
-	icon_state = "greenerdirt"
-	baseturfs = /turf/open/floor/plating/dirt/dark
-	initial_gas_mix = JUNGLEPLANET_DEFAULT_ATMOS
-
-/turf/open/floor/plating/dirt/try_replace_tile(obj/item/stack/tile/T, mob/user, params)
-	return
-
-/turf/open/floor/plating/dirt/burn_tile()
-	return FALSE
-
-/turf/open/floor/plating/dirt/icemoon
-	initial_gas_mix = ICEMOON_DEFAULT_ATMOS
-	baseturfs = /turf/open/floor/plating/dirt/icemoon
-	planetary_atmos = TRUE
-
-//ESPECIALLY dont use this
-
-/turf/open/floor/plating/dirt/old
-
-/turf/open/floor/plating/dirt/old/lit
-	light_power = 1
-	light_range = 2
-
-/turf/open/floor/plating/dirt/old/dark
-
-/turf/open/floor/plating/dirt/old/dark/lit
-	light_power = 1
-	light_range = 2
-
-/turf/open/floor/plating/dirt/dry/lit
-	light_power = 1
-	light_range = 2
-
-
 //Artifical sand turfs
 /turf/open/floor/plating/asteroid/sand/ship
-	name = "sand"
-	icon = 'icons/misc/beach.dmi'
-	icon_state = "sand"
-	base_icon_state = "sand"
 	baseturfs = /turf/open/floor/plating
 	initial_gas_mix = OPENTURF_DEFAULT_ATMOS
 	planetary_atmos = FALSE
 	digResult = null
-
-//artifical water turfs
-/turf/open/water/ship
-	icon = 'icons/misc/beach.dmi'
-	icon_state = "water"
-	base_icon_state = "water"
-	initial_gas_mix = OPENTURF_DEFAULT_ATMOS
-	planetary_atmos = FALSE

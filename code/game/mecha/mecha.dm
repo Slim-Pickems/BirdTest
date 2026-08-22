@@ -318,7 +318,7 @@
 
 /obj/mecha/examine(mob/user)
 	. = ..()
-	var/integrity = obj_integrity*100/max_integrity
+	var/integrity = atom_integrity*100/max_integrity
 	switch(integrity)
 		if(85 to 100)
 			. += "It's fully intact."
@@ -422,7 +422,7 @@
 				else
 					occupant.throw_alert("charge", /atom/movable/screen/alert/emptycell)
 
-		var/integrity = obj_integrity/max_integrity*100
+		var/integrity = atom_integrity/max_integrity*100
 		switch(integrity)
 			if(30 to 45)
 				occupant.throw_alert("exosuit damage", /atom/movable/screen/alert/low_mech_integrity, 1)
@@ -466,7 +466,7 @@
 	if (occupant && !enclosed && !silicon_pilot)
 		if (occupant.fire_stacks < 5)
 			occupant.fire_stacks += 1
-		occupant.IgniteMob()
+		occupant.ignite_mob()
 
 /obj/mecha/proc/drop_item()//Derpfix, but may be useful in future for engineering exosuits.
 	return
@@ -700,7 +700,7 @@
 		if(isobj(obstacle))
 			var/obj/object = obstacle
 			obstacle.mech_melee_attack(src)
-			if(!(object.resistance_flags & INDESTRUCTIBLE) && charge_toss_structures)
+			if(!(object.resistance_flags & INDESTRUCTIBLE) && charge_toss_structures && !QDELETED(object))
 				object.throw_at(throw_target, 4, 3)
 			visible_message(span_danger("[src] crashes into [obstacle]!"))
 			playsound(src, 'sound/effects/bang.ogg', 50, TRUE)
@@ -742,7 +742,7 @@
 	if(!islist(possible_int_damage) || !length(possible_int_damage))
 		return
 	if(prob(20))
-		if(ignore_threshold || obj_integrity*100/max_integrity < internal_damage_threshold)
+		if(ignore_threshold || atom_integrity*100/max_integrity < internal_damage_threshold)
 			for(var/T in possible_int_damage)
 				if(internal_damage & T)
 					possible_int_damage -= T
@@ -751,7 +751,7 @@
 				if(int_dam_flag)
 					setInternalDamage(int_dam_flag)
 	if(prob(5))
-		if(ignore_threshold || obj_integrity*100/max_integrity < internal_damage_threshold)
+		if(ignore_threshold || atom_integrity*100/max_integrity < internal_damage_threshold)
 			if (length(equipment))
 				var/obj/item/mecha_parts/mecha_equipment/ME = pick(equipment)
 				qdel(ME)
@@ -988,7 +988,7 @@
 				final_delay = enter_delay/2
 
 	if(do_after(user, final_delay, target = src))
-		if(obj_integrity <= 0)
+		if(atom_integrity <= 0)
 			to_chat(user, span_warning("You cannot get in the [name], it has been destroyed!"))
 		else if(occupant)
 			to_chat(user, span_danger("[occupant] was faster! Try better next time, loser."))
@@ -1331,4 +1331,5 @@ GLOBAL_VAR_INIT(year_integer, text2num(year)) // = 2013???
 /// Sets the direction of the mecha and all of its occcupents, required for FOV. Alternatively one could make a recursive contents registration and register topmost direction changes in the fov component
 /obj/mecha/proc/set_dir_mecha(new_dir)
 	setDir(new_dir)
-	occupant.setDir(new_dir)
+	if(occupant)
+		occupant.setDir(new_dir)

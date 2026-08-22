@@ -3,14 +3,14 @@
 	desc = "Nom nom nom"
 	icon_state = "soup"
 
-/obj/effect/spawner/random/food_or_drink/donkpockets
-	name = "donk pocket box spawner"
-	icon_state = "donkpocket"
+/obj/effect/spawner/random/food_or_drink/shoalpockets
+	name = "shoal pocket box spawner"
+	icon_state = "shoalpocket"
 	loot = list(
-		/obj/item/storage/box/donkpockets/donkpocketspicy = 1,
-		/obj/item/storage/box/donkpockets/donkpocketteriyaki = 1,
-		/obj/item/storage/box/donkpockets/donkpocketpizza = 1,
-		/obj/item/storage/box/donkpockets/donkpocketberry = 1,
+		/obj/item/storage/box/shoalpockets/shoalpocketspicy = 1,
+		/obj/item/storage/box/shoalpockets/shoalpocketteriyaki = 1,
+		/obj/item/storage/box/shoalpockets/shoalpocketpizza = 1,
+		/obj/item/storage/box/shoalpockets/shoalpocketberry = 1,
 		)
 
 /obj/effect/spawner/random/food_or_drink/ration
@@ -93,19 +93,19 @@
 	spawn_loot_count = 3
 	spawn_loot_double = FALSE
 	var/soups = list(
-			/obj/item/reagent_containers/food/snacks/soup/beet,
-			/obj/item/reagent_containers/food/snacks/soup/sweet_potato,
-			/obj/item/reagent_containers/food/snacks/soup/stew,
-			/obj/item/reagent_containers/food/snacks/soup/hotchili,
-			/obj/item/reagent_containers/food/snacks/soup/nettle,
-			/obj/item/reagent_containers/food/snacks/soup/meatball,
+			/obj/item/food/soup/beet,
+			/obj/item/food/soup/sweetpotato,
+			/obj/item/food/soup/stew,
+			/obj/item/food/soup/hotchili,
+			/obj/item/food/soup/nettle,
+			/obj/item/food/soup/meatball,
 			)
 	var/salads = list(
-			/obj/item/reagent_containers/food/snacks/salad/herbsalad,
-			/obj/item/reagent_containers/food/snacks/salad/validsalad,
-			/obj/item/reagent_containers/food/snacks/salad/fruit,
-			/obj/item/reagent_containers/food/snacks/salad/jungle,
-			/obj/item/reagent_containers/food/snacks/salad/aesirsalad,
+			/obj/item/food/salad/herbsalad,
+			/obj/item/food/salad/validsalad,
+			/obj/item/food/salad/fruit,
+			/obj/item/food/salad/jungle,
+			/obj/item/food/salad/aesirsalad,
 			)
 	var/mains = list(
 			/obj/item/food/bearsteak,
@@ -220,7 +220,6 @@
 	loot = list(
 		/obj/item/food/grown/cannabis/rainbow = 1,
 		/obj/item/food/grown/cannabis/death = 1,
-		/obj/item/seeds/replicapod = 1,
 		/obj/item/food/grown/mushroom/angel = 1,
 		/obj/item/food/grown/mushroom/libertycap = 2,
 		/obj/item/seeds/tower/steel = 2,

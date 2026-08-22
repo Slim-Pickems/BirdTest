@@ -126,17 +126,14 @@
 	return "[..()] \[<a href='byond://?src=[REF(src)];mode=0'>Laser</a>|<a href='byond://?src=[REF(src)];mode=1'>Disabler</a>\]"
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/laser
-	equip_cooldown = 16
+	equip_cooldown = 30
 	name = "\improper CH-LC \"Solaris\" beam sniper"
-	desc = "A scoped weapon for combat exosuits. Shoots long range heavy beam lasers."
+	desc = "A weapon for combat exosuits. Shoots long range heavy beam lasers."
 	icon_state = "mecha_laser"
-	energy_drain = 60
+	energy_drain = 1000
 	projectile = /obj/projectile/beam/emitter/hitscan
 	fire_sound = 'sound/weapons/lasercannonfire.ogg'
 	full_auto = FALSE
-	scoped = TRUE
-	zoom_mod = 10
-	zoom_out_mod = 3
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/ion
 	equip_cooldown = 20
@@ -179,7 +176,7 @@
 	righthand_file = GUN_RIGHTHAND_ICON
 	energy_drain = 30
 	projectile = /obj/projectile/plasma/adv/mech
-	fire_sound = 'sound/weapons/plasma_cutter.ogg'
+	fire_sound = 'sound/weapons/melee/plasmacutter/plasma_cutter.ogg'
 	harmful = TRUE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/plasma/can_attach(obj/mecha/working/M)
@@ -367,7 +364,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/railgun
 	name = "\improper PR-05 Mounted Plasma Railgun"
-	desc = "A plasma railgun manufactured by NT and taking a different direction from their handheld counterpart. Namely utilizing the plasma NT had such large quantities of to help with heating and accelerating the projectile. Shoots super-heated high-density iron-tungsten rods at ludicrous speeds."
+	desc = "A plasma railgun manufactured by Makosso-Warra and taking a different direction from their handheld counterpart. Namely utilizing the plasma Makosso-Warra had such large quantities of to help with heating and accelerating the projectile. Shoots super-heated high-density iron-tungsten rods at ludicrous speeds."
 	icon_state = "mecha_railgun"
 	equip_cooldown = 34
 	projectile = /obj/projectile/bullet/p50/penetrator/sabot
@@ -389,7 +386,7 @@
 	name = "\improper SRM-8 missile rack"
 	desc = "A weapon for combat exosuits. Launches light explosive missiles."
 	icon_state = "mecha_missilerack"
-	projectile = /obj/projectile/bullet/a84mm_he
+	projectile = /obj/projectile/bullet/a84mm/he
 	fire_sound = 'sound/weapons/gun/general/rocket_launch.ogg'
 	projectiles = 8
 	projectiles_cache = 0

@@ -403,7 +403,10 @@ GLOBAL_LIST_EMPTY(teleportlocs)
  */
 /area/proc/close_and_lock_door(obj/machinery/door/DOOR)
 	set waitfor = FALSE
-	DOOR.close()
+	if(DOOR.close_exception)
+		return
+	else
+		DOOR.close()
 	if(DOOR.density)
 		DOOR.lock()
 
@@ -423,6 +426,9 @@ GLOBAL_LIST_EMPTY(teleportlocs)
 	//Lockdown airlocks
 	for(var/obj/machinery/door/DOOR in src)
 		close_and_lock_door(DOOR)
+
+	for(var/obj/structure/hazard/hazards in src)
+		hazards.alarm()
 
 	for (var/i in GLOB.silicon_mobs)
 		var/mob/living/silicon/SILICON = i
